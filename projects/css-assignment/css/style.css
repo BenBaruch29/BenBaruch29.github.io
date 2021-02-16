@@ -1,3 +1,28 @@
 h1 {
     font-family: 'Playfair Display', serif;
 }
+
+h2 {
+	font-family: 'Roboto Slab', serif;
+}
+
+.byline {
+	font-size: small;
+}
+
+.credit {
+	font-size: small;
+}
+
+.dateline {
+	font-size: small;
+}
+
+.paragraph {
+	font-weight: 700;
+}
+
+#paragraph1 {
+	font-size: large;
+}
+
