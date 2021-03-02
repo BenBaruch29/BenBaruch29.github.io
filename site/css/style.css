@@ -5,3 +5,7 @@ h1 {
 h2, h3, p, a {
 	font-family: 'News Cycle', sans-serif;
 }
+
+h2 {
+	color: #B22222;
+}
