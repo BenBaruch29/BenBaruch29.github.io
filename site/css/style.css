@@ -1,11 +1,62 @@
 h1 {
 	font-family: 'Newsreader', serif;
+	text-align: center;
+	padding-top: 1%;
 }
 
 h2, h3, p, a {
 	font-family: 'News Cycle', sans-serif;
 }
 
+p,a {
+	font-size: 18px;
+}
+
+.bio {
+	font-size: 18px;
+}
+
+.resume-text {
+	font-size: 18px;
+}
+
+.description {
+	width: 60%;
+}
+
+.contact-text {
+	font-size: 18px;
+}
+
+.nav {
+	background-color: #B22222
+}
+
+
 h2 {
 	color: #B22222;
+}
+
+.clips {
+	text-align:center;
+}
+
+.nav-link {
+	color: white;
+}
+
+.navigation-text-align {
+	text-align: center;
+}
+
+.bottom {
+	padding-bottom: 2%;
+}
+
+.second {
+	padding-bottom: 1%;
+}
+
+body {
+	background-color: #DDDDDD;
 }
