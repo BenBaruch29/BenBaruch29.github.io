@@ -17,12 +17,11 @@ a {
 }
 
 a {
-	font-weight: bold;
+    font-weight: bold;
 }
 
-a:hover 
-{
-     color: white;
+a:hover {
+    color: white;
 }
 
 .bio {
@@ -75,9 +74,9 @@ body {
 }
 
 img {
-	min-height: 175px;
+    min-height: 175px;
 }
 
 .graduation {
-	text-align: right;
+    text-align: right;
 }
