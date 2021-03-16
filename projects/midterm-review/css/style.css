@@ -1,0 +1,52 @@
+h1 {
+	text-transform: uppercase;
+	text-align: center;
+	font-family: 'Montserrat', sans-serif;
+}
+
+h2 {
+	text-transform: uppercase;
+	color: #9e2009;
+	font-size: large;
+}
+
+h3 {
+	color: #000000;
+	font-size: large;
+}
+
+#title {
+	text-align: center;
+}
+
+.subtitle {
+	text-transform: uppercase;
+}
+
+.brawl {
+	font-size: xx-large;
+}
+
+.headline {
+	background-color: #ededed;
+	padding-bottom: 5%;
+	padding-top: 5%;
+}
+
+.footer {
+	background-color: #ededed;
+	padding-bottom: 2%;
+}
+
+.methods {
+	background-color: #ededed;
+	padding: 2%;
+}
+
+.img1txt {
+	text-align: left;
+}
+
+.container {
+	max-width: 575px;
+}
