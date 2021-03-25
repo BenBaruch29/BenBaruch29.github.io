@@ -7,46 +7,99 @@ h1 {
 h2 {
 	text-transform: uppercase;
 	color: #9e2009;
-	font-size: large;
+	font-size: 17px;
+	font-weight: 600;
+	padding-left: 2%;
+	padding-right: 2%;
 }
 
 h3 {
 	color: #000000;
-	font-size: large;
+	font-size: 20px;
+	padding-left: 2%;
+	padding-right: 2%;
 }
 
-#title {
-	text-align: center;
+h4 {
+	font-size: 16px;
 }
 
-.subtitle {
-	text-transform: uppercase;
+.boxtitle {
+	font-weight: 700;
+}
+
+.boxtext {
+	font-weight: normal;
+	font-size: 17px !important;
+}
+
+.boxlist {
+	font-weight: normal;
+	font-size: 17px !important;
+}
+
+p {
+	font-family: 'Shippori Mincho B1', serif;
+	padding-left: 2%;
+	padding-right: 2%;
+}
+
+.beauty {
+	font-weight: 700;
+	font-size: 40px;
 }
 
 .brawl {
-	font-size: xx-large;
+	font-size: 120px;
+	font-weight: 800;
+	letter-spacing: 5px;
+	line-height: 0.7;
+}
+
+.subtitle {
+	font-size: 23px;
+	font-weight: 400;
+}
+
+.title {
+	text-align: center;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 14px;
 }
 
 .headline {
 	background-color: #ededed;
-	padding-bottom: 5%;
-	padding-top: 5%;
+	padding: 5%;
 }
 
 .footer {
 	background-color: #ededed;
 	padding-bottom: 2%;
+	font-family: 'Montserrat', sans-serif !important;
+	font-size: 12px;
 }
 
 .methods {
 	background-color: #ededed;
-	padding: 2%;
+	padding: 10px;
+	margin-top: 2%
+	margin-bottom: 2%;
 }
 
-.img1txt {
-	text-align: left;
+.usvsworld {
+	font-family: 'Shippori Mincho B1', serif;
 }
 
-.container {
-	max-width: 575px;
+@media (max-width: 500px) {
+  .beauty {
+  	font-size: 30px;
+  	line-height: 1.2;
+  }
+  .brawl {
+  	font-size: 60px;
+  	letter-spacing: 1px;
+  }
+  .subtitle {
+  	font-size: 13px;
+  }
 }
