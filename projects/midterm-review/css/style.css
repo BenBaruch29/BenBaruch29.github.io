@@ -103,3 +103,8 @@ p {
   	font-size: 13px;
   }
 }
+
+.col-md-3 
+{
+	background-color: #ededed;
+}
