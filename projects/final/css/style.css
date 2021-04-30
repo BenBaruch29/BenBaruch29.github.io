@@ -1,0 +1,31 @@
+body {
+	background-color: #809fff;
+}
+
+h1 {
+	font-size: 70px;
+}
+
+h2 {
+	font-size: 35px;
+}
+
+h1, h2 {
+	font-family: 'Electrolize';
+	font-weight: 600;
+}
+
+h1, .byline {
+	text-align: center;
+}
+
+.byline {
+	font-style: italic;
+}
+
+
+p {
+	font-family: 'Fraunces';
+	color: white;
+	font-size: 20px;
+}
