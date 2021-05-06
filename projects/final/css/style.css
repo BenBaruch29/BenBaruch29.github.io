@@ -1,31 +1,128 @@
-body {
-	background-color: #809fff;
+.heading {
+    position: relative;
+    padding: 3%
+}
+
+.heading::before {
+    content: "";
+    background-image: url("../graphics/dboard.jpg");
+    background-size: cover;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    opacity: 0.5;
 }
 
 h1 {
-	font-size: 70px;
+    font-size: 70px;
+    color: white;
+    text-shadow: 6px 6px black;
+    position: relative;
+    line-height: 0.9;
 }
 
 h2 {
-	font-size: 35px;
+    font-size: 35px;
 }
 
-h1, h2 {
-	font-family: 'Electrolize';
-	font-weight: 600;
+h1,
+h2,
+h3 {
+    font-family: 'Electrolize';
+    font-weight: 600;
 }
 
-h1, .byline {
-	text-align: center;
+h1,
+.byline {
+    text-align: center;
 }
 
 .byline {
-	font-style: italic;
+    font-style: italic;
+    font-size: 30px;
 }
 
+a {
+    color: black;
+    text-decoration: none;
+}
 
 p {
-	font-family: 'Fraunces';
-	color: white;
-	font-size: 20px;
+    font-family: 'Fraunces';
+    font-size: 22px;
+}
+
+.blue_box {
+    background-color: #809fff;
+    padding: 1%;
+}
+
+.footer {
+    padding-bottom: 3%;
+}
+
+.close {
+    text-align: center;
+    font-style: italic;
+}
+
+.caption {
+    font-size: 16px;
+    font-style: italic;
+}
+
+@media (max-width: 715px) {
+    h1 {
+        font-size: 60px;
+    }
+}
+
+@media (max-width: 613px) {
+    h1 {
+        font-size: 45px;
+    }
+
+    p {
+        font-size: 18px;
+    }
+
+    body {
+        padding: 1%;
+    }
+}
+
+@media (max-width: 468px) {
+    h1 {
+        font-size: 35px;
+    }
+
+    .byline {
+        font-size: 20px;
+    }
+
+    p {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 364px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    .byline {
+        font-size: 15px;
+    }
+
+    p {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 292px) {
+    h1 {
+        font-size: 25px;
+    }
 }
