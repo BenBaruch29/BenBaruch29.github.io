@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.104.3" />
+
+
+<title>B10 Average Offensive Plays - Ben Baruch&#39;s Sports Blog</title>
+<meta property="og:title" content="B10 Average Offensive Plays - Ben Baruch&#39;s Sports Blog">
+
+
+  <link href='https://BenBaruch29.github.io/sportsblog/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/sportsblog/css/fonts.css" media="all">
+<link rel="stylesheet" href="/sportsblog/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/sportsblog/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/sportsblog/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">B10 Average Offensive Plays</h1>
+
+    
+    <span class="article-date">2022-10-13</span>
+    
+
+    <div class="article-content">
+      
+
+
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+## ✔ ggplot2 3.3.6      ✔ purrr   0.3.4 
+## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+## ✔ tidyr   1.2.0      ✔ stringr 1.4.1 
+## ✔ readr   2.1.2      ✔ forcats 0.5.2 
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(scales)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;scales&#39;
+## 
+## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     discard
+## 
+## The following object is masked from &#39;package:readr&#39;:
+## 
+##     col_factor</code></pre>
+<p>After loading the large dataframe, I’ll use the filter function to limit my results to the Big Ten Conference only. We’ll call this smaller dataframe big_ten</p>
+<pre class="r"><code>logs &lt;- read.csv(&quot;C:/Users/benba/OneDrive/Documents/GitHub/jour479x_fall_2022/data/footballlogs21.csv&quot;)
+big_ten &lt;- logs %&gt;% 
+  filter(Conference == &quot;Big Ten Conference&quot;)</code></pre>
+<p>Now, we’re going to calculate how many offensive plays each Big Ten team had, on average. We’ll do this by making a new dataframe called avg_plays. We’ll group by Teams (in this case called TeamFull), and summarize their average plays, which will be the mean of their total offensive plays.</p>
+<pre class="r"><code>avg_plays &lt;- big_ten %&gt;%
+  group_by(TeamFull) %&gt;% 
+  summarize(avg_plays = mean(OffensivePlays))</code></pre>
+<p>Now, we’ll plot this data using ggplot</p>
+<pre class="r"><code>ggplot() + 
+  geom_bar(
+    data=avg_plays,
+    aes(x=reorder(TeamFull, -avg_plays),
+        weight=avg_plays)) + 
+  scale_y_continuous(labels=comma) + 
+  labs(
+    title=&quot;Big Ten Average Offensive Plays&quot;,
+    x=&quot;School&quot;,
+    y=&quot;Average Offensive Plays&quot;) +
+  theme_minimal() + 
+  coord_flip()</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/13/b10-average-offensive-plays/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Last year, the Big Ten teams with the most average offensive players were Purdue, Maryland and Penn State. The ones with the least were Illinois, Minnesota and Iowa.</p>
+<pre class="r"><code>logs &lt;- read.csv(&quot;https://dwillis.github.io/sports-data-files/footballlogs22.csv&quot;)
+big_ten &lt;- logs %&gt;% 
+  filter(Conference == &quot;Big Ten Conference&quot;)</code></pre>
+<p>Now, we’re going to calculate how many offensive plays each Big Ten team had, on average. We’ll do this by making a new dataframe called avg_plays. We’ll group by Teams (in this case called TeamFull), and summarize their average plays, which will be the mean of their total offensive plays.</p>
+<pre class="r"><code>avg_plays &lt;- big_ten %&gt;%
+  group_by(TeamFull) %&gt;% 
+  summarize(avg_plays = mean(OffensivePlays))</code></pre>
+<p>Now, we’ll plot this data using ggplot</p>
+<pre class="r"><code>ggplot() + 
+  geom_bar(
+    data=avg_plays,
+    aes(x=reorder(TeamFull, -avg_plays),
+        weight=avg_plays)) + 
+  scale_y_continuous(labels=comma) + 
+  labs(
+    title=&quot;Big Ten Average Offensive Plays 2022&quot;,
+    x=&quot;School&quot;,
+    y=&quot;Average Offensive Plays&quot;) +
+  theme_minimal() + 
+  coord_flip()</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/13/b10-average-offensive-plays/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>This year, Indiana, Northwestern and Illinois are at the top, while Wisconsin, Michigan Sttae, and Iowa (still) are at the bottom.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/sportsblog/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/sportsblog/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+
