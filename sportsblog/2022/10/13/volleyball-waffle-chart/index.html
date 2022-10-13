@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.104.3" />
+
+
+<title>Volleyball Waffle Chart - Ben Baruch&#39;s Sports Blog</title>
+<meta property="og:title" content="Volleyball Waffle Chart - Ben Baruch&#39;s Sports Blog">
+
+
+  <link href='https://BenBaruch29.github.io/sportsblog/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/sportsblog/css/fonts.css" media="all">
+<link rel="stylesheet" href="/sportsblog/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/sportsblog/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/sportsblog/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">6 min read</span>
+    
+
+    <h1 class="article-title">Volleyball Waffle Chart</h1>
+
+    
+    <span class="article-date">2022-10-13</span>
+    
+
+    <div class="article-content">
+      
+
+
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+## ✔ ggplot2 3.3.6      ✔ purrr   0.3.4 
+## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+## ✔ tidyr   1.2.0      ✔ stringr 1.4.1 
+## ✔ readr   2.1.2      ✔ forcats 0.5.2 
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(dplyr)
+library(waffle)</code></pre>
+<p>As always, we start by loading and checking the data.</p>
+<pre class="r"><code>logs &lt;- read_csv(&quot;https://raw.githubusercontent.com/dwillis/NCAAWomensVolleyballData/main/data/ncaa_womens_volleyball_matchstats_2022.csv&quot;)</code></pre>
+<pre><code>## Rows: 6077 Columns: 36
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr   (3): team, opponent, home_away
+## dbl  (31): team_score, opponent_score, s, kills, errors, total_attacks, hit_...
+## lgl   (1): result
+## date  (1): date
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>glimpse(logs)</code></pre>
+<pre><code>## Rows: 6,077
+## Columns: 36
+## $ date                    &lt;date&gt; 2022-08-26, 2022-08-26, 2022-08-27, 2022-08-3…
+## $ team                    &lt;chr&gt; &quot;A&amp;M-Corpus Christi Islanders&quot;, &quot;A&amp;M-Corpus Ch…
+## $ opponent                &lt;chr&gt; &quot;Nebraska&quot;, &quot;Pepperdine&quot;, &quot;Tulsa&quot;, &quot;UTRGV&quot;, &quot;S…
+## $ home_away               &lt;chr&gt; &quot;Away&quot;, &quot;Away&quot;, &quot;Away&quot;, &quot;Away&quot;, &quot;Home&quot;, &quot;Home&quot;…
+## $ result                  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ team_score              &lt;dbl&gt; 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 2, 0, 2, 1, 3, 0…
+## $ opponent_score          &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3…
+## $ s                       &lt;dbl&gt; 3, 3, 5, 5, 3, 3, 3, 3, 3, 3, 5, 3, 5, 4, 3, 3…
+## $ kills                   &lt;dbl&gt; 20, 36, 75, 78, 41, 41, 25, 34, 33, 36, 69, 24…
+## $ errors                  &lt;dbl&gt; 22, 21, 22, 24, 22, 18, 17, 22, 20, 21, 29, 16…
+## $ total_attacks           &lt;dbl&gt; 97, 107, 199, 198, 128, 104, 85, 95, 91, 108, …
+## $ hit_pct                 &lt;dbl&gt; -0.021, 0.140, 0.266, 0.273, 0.148, 0.221, 0.0…
+## $ assists                 &lt;dbl&gt; 18, 36, 72, 73, 37, 40, 22, 34, 29, 30, 67, 21…
+## $ aces                    &lt;dbl&gt; 2, 0, 7, 2, 3, 6, 2, 3, 3, 2, 4, 8, 7, 10, 3, …
+## $ s_err                   &lt;dbl&gt; 9, 11, 9, 9, 5, 9, 7, 8, 4, 7, 11, 5, 4, 10, 6…
+## $ digs                    &lt;dbl&gt; 30, 45, 103, 81, 61, 39, 20, 28, 30, 35, 65, 4…
+## $ r_err                   &lt;dbl&gt; 5, 2, 2, 4, 7, 5, 8, 5, 9, 6, 3, 7, 5, 7, 2, 3…
+## $ block_solos             &lt;dbl&gt; 0, 1, 1, 2, 2, 2, 5, 4, 0, 1, 1, 1, 3, 2, 6, 0…
+## $ block_assists           &lt;dbl&gt; 5, 15, 10, 4, 6, 0, 3, 8, 6, 4, 10, 0, 10, 4, …
+## $ b_err                   &lt;dbl&gt; 0, 0, 4, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0…
+## $ pts                     &lt;dbl&gt; 24.5, 44.5, 88.0, 84.0, 49.0, 49.0, 33.5, 45.0…
+## $ bhe                     &lt;dbl&gt; 0, 1, 3, 1, 1, 0, 1, 1, 1, 1, 0, 2, 2, 3, 0, 1…
+## $ defensive_kills         &lt;dbl&gt; 38, 36, 75, 79, 41, 43, 41, 39, 39, 39, 63, 45…
+## $ defensive_errors        &lt;dbl&gt; 7, 14, 17, 20, 13, 10, 15, 13, 11, 9, 19, 12, …
+## $ defensive_total_attacks &lt;dbl&gt; 80, 103, 213, 188, 119, 96, 79, 84, 83, 89, 16…
+## $ defensive_hit_pct       &lt;dbl&gt; 0.388, 0.214, 0.272, 0.314, 0.235, 0.344, 0.32…
+## $ defensive_assists       &lt;dbl&gt; 30, 34, 69, 73, 33, 39, 40, 37, 31, 37, 62, 38…
+## $ defensive_aces          &lt;dbl&gt; 5, 2, 2, 4, 7, 5, 8, 5, 9, 6, 3, 7, 5, 7, 2, 3…
+## $ defensive_s_err         &lt;dbl&gt; 10, 5, 8, 5, 6, 5, 8, 7, 5, 8, 9, 13, 12, 10, …
+## $ defensive_digs          &lt;dbl&gt; 41, 39, 89, 88, 52, 38, 37, 31, 33, 46, 69, 53…
+## $ defensive_r_err         &lt;dbl&gt; 2, 0, 7, 2, 3, 6, 2, 3, 3, 2, 4, 8, 7, 10, 3, …
+## $ defensive_block_solos   &lt;dbl&gt; 0, 1, 4, 2, 3, 3, 3, 6, 1, 2, 4, 0, 7, 5, 1, 5…
+## $ defensive_block_assists &lt;dbl&gt; 24, 16, 8, 10, 8, 4, 12, 8, 12, 10, 16, 9, 12,…
+## $ defensive_b_err         &lt;dbl&gt; 1, 3, 0, 1, 0, 2, 4, 0, 3, 0, 1, 1, 1, 0, 3, 4…
+## $ defensive_pts           &lt;dbl&gt; 55.0, 47.0, 85.0, 90.0, 55.0, 53.0, 58.0, 54.0…
+## $ defensive_bhe           &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 4, 0, 0…</code></pre>
+<p>Our goal with this project is to find how many of Maryland’s points came through kills, blocks and aces. Essentially, how is Maryland scoring the points it can control? This dataset includes data from all the NCAA volleyball teams, so we’re going to make a smaller dataset that limits the results to Maryland only, and we’ll include the columns that are most relevant to us.</p>
+<pre class="r"><code>UMD &lt;- logs %&gt;% 
+  filter(team == &quot;Maryland Terrapins, Terps&quot;) %&gt;% 
+  summarize(team, opponent, kills, aces, block_solos, block_assists, pts)</code></pre>
+<p>The first problem we encounter is that blocks aren’t directly included in the dataframe so we need to mutate block solos and block assists into a new column</p>
+<pre class="r"><code>UMD &lt;- UMD %&gt;% mutate(
+  total_blocks = block_solos + round(block_assists/2)
+) %&gt;% summarize(team, opponent, kills, aces, total_blocks, pts)</code></pre>
+<p>Our next issue is that the points column sometimes inlcudes half points, which we want to exclude. So we’ll make our own points column that doesn’t account for block assists, the primary culprit of this problem.</p>
+<pre class="r"><code>UMD &lt;- UMD %&gt;% mutate(
+  md_pts = kills + aces + total_blocks
+) %&gt;% summarize(team, opponent, kills, aces, total_blocks, md_pts, pts)</code></pre>
+<p>Now we need to sum all these totals together.</p>
+<pre class="r"><code>sums &lt;- UMD %&gt;%
+  summarize(total_kills = sum(kills),
+            total_aces = sum(aces),
+            total_season_blocks = sum(total_blocks),
+            total_points = sum(md_pts)
+            )</code></pre>
+<p>The math checks out. Maryland had 767 kills, 133 aces, 227 blocks for a total of 1127 points. We can now make our waffle chart.</p>
+<pre class="r"><code>md &lt;- c(&quot;Kills&quot;=767, &quot;Aces&quot;=133, &quot;Blocks&quot;=227)
+
+waffle(
+  md/2, 
+    rows = 10, 
+    title=&quot;Maryland&#39;s offensive point distribution&quot;, 
+    xlab=&quot;1 square = 1 point&quot;, 
+    colors = c(&quot;black&quot;, &quot;red&quot;, &quot;yellow&quot;)
+)</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/13/volleyball-waffle-chart/index_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+The graph shows that Maryland scores most of its points off kills. Aces and blocks combined make up less than half of Maryland’s total offense this season. But how do they compare to other Big Ten teams? Let’s redo the process with 14-1 (6-0) Nebraska.</p>
+<pre class="r"><code>NU &lt;- logs %&gt;% 
+  filter(team == &quot;Nebraska Cornhuskers&quot;) %&gt;% 
+  mutate(
+  total_blocks = block_solos + round(block_assists/2),
+  nu_pts = kills + aces + total_blocks
+  ) %&gt;% summarize(team, opponent, kills, aces, total_blocks, nu_pts)
+
+nu_sums &lt;- NU %&gt;%
+  summarize(total_kills = sum(kills),
+            total_aces = sum(aces),
+            total_season_blocks = sum(total_blocks),
+            total_points = sum(nu_pts)
+            )</code></pre>
+<p>Now the waffle chart for Nebraska.</p>
+<pre class="r"><code>neb &lt;- c(&quot;Kills&quot;=683, &quot;Aces&quot;=64, &quot;Blocks&quot;=139)
+
+waffle(
+  neb/2, 
+    rows = 10, 
+    title=&quot;Nebraska&#39;s offensive point distribution&quot;, 
+    xlab=&quot;1 square = 1 point&quot;, 
+    colors = c(&quot;red&quot;, &quot;black&quot;, &quot;grey&quot;)
+)</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/13/volleyball-waffle-chart/index_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+This looks very similar to Maryland. Again, most of Nebraska’s points are coming off kills. Let’s put Maryland and Nebraska side-by-side</p>
+<pre class="r"><code>iron(
+  waffle(
+  md/2, 
+    rows = 10, 
+    title=&quot;Maryland&#39;s offensive point distribution&quot;, 
+    xlab=&quot;1 square = 1 point&quot;, 
+    colors = c(&quot;black&quot;, &quot;red&quot;, &quot;yellow&quot;)
+  ),
+  waffle(
+  neb/2, 
+    rows = 10, 
+    title=&quot;Nebraska&#39;s offensive point distribution&quot;, 
+    xlab=&quot;1 square = 1 point&quot;, 
+    colors = c(&quot;red&quot;, &quot;black&quot;, &quot;grey&quot;)
+)
+)</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/13/volleyball-waffle-chart/index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Side by side, it seems like there is a good chunk of extra points Nebraska is scoring off kills as opposed to Maryland. Still, both teams score the vast majority of their points off kills. The main difference between the two teams is the fact that Maryland scored more points than Nebraska. That’s probably because Maryland played more sets than Nebraska. Nevertheless, we’re looking for point distribution (percentage) here, not how many total points each is scoring. Bottom line, both Maryland and Nebraska score their points in similar ways.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/sportsblog/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/sportsblog/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
