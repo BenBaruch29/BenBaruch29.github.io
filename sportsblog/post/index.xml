@@ -13,7 +13,8 @@
       <pubDate>Thu, 13 Oct 2022 00:00:00 +0000</pubDate>
       
       <guid>https://BenBaruch29.github.io/sportsblog/2022/10/13/big-ten-average-offensive-plays/</guid>
-      <description></description>
+      <description>library(tidyverse)library(scales) After loading the large dataframe, I&amp;rsquo;ll use the filter function to limit my results to the Big Ten Conference only. We&amp;rsquo;ll call this smaller dataframe big_ten
+logs &amp;lt;- read.csv(&amp;#34;C:/Users/benba/OneDrive/Documents/GitHub/jour479x_fall_2022/data/footballlogs21.csv&amp;#34;)big_ten &amp;lt;- logs %&amp;gt;% filter(Conference == &amp;#34;Big Ten Conference&amp;#34;) Now, we&amp;rsquo;re going to calculate how many offensive plays each Big Ten team had, on average. We&amp;rsquo;ll do this by making a new dataframe called avg_plays. We&amp;rsquo;ll group by Teams (in this case called TeamFull), and summarize their average plays, which will be the mean of their total offensive plays.</description>
     </item>
     
     <item>

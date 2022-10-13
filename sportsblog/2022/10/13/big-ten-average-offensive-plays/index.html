@@ -22,6 +22,11 @@
 
 
 
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
 <link rel="stylesheet" href="/sportsblog/css/fonts.css" media="all">
 <link rel="stylesheet" href="/sportsblog/css/main.css" media="all">
 
@@ -57,7 +62,7 @@
 
   <article class="article">
     
-    <span class="article-duration">0 min read</span>
+    <span class="article-duration">2 min read</span>
     
 
     <h1 class="article-title">Big Ten Average Offensive Plays</h1>
@@ -67,7 +72,52 @@
     
 
     <div class="article-content">
-      
+      <pre tabindex="0"><code>library(tidyverse)
+library(scales)
+</code></pre><p>After loading the large dataframe, I&rsquo;ll use the filter function to limit my results to the Big Ten Conference only. We&rsquo;ll call this smaller dataframe big_ten</p>
+<pre tabindex="0"><code>logs &lt;- read.csv(&#34;C:/Users/benba/OneDrive/Documents/GitHub/jour479x_fall_2022/data/footballlogs21.csv&#34;)
+big_ten &lt;- logs %&gt;% 
+  filter(Conference == &#34;Big Ten Conference&#34;)
+</code></pre><p>Now, we&rsquo;re going to calculate how many offensive plays each Big Ten team had, on average. We&rsquo;ll do this by making a new dataframe called avg_plays. We&rsquo;ll group by Teams (in this case called TeamFull), and summarize their average plays, which will be the mean of their total offensive plays.</p>
+<pre tabindex="0"><code>avg_plays &lt;- big_ten %&gt;%
+  group_by(TeamFull) %&gt;% 
+  summarize(avg_plays = mean(OffensivePlays))
+</code></pre><p>Now, we&rsquo;ll plot this data using ggplot</p>
+<pre tabindex="0"><code>ggplot() + 
+  geom_bar(
+    data=avg_plays,
+    aes(x=reorder(TeamFull, -avg_plays),
+        weight=avg_plays)) + 
+  scale_y_continuous(labels=comma) + 
+  labs(
+    title=&#34;Big Ten Average Offensive Plays&#34;,
+    x=&#34;School&#34;,
+    y=&#34;Average Offensive Plays&#34;) +
+  theme_minimal() + 
+  coord_flip()
+</code></pre><p>Last year, the Big Ten teams with the most average offensive players were Purdue, Maryland and Penn State. The ones with the least were Illinois, Minnesota and Iowa.</p>
+<pre tabindex="0"><code>logs &lt;- read.csv(&#34;https://dwillis.github.io/sports-data-files/footballlogs22.csv&#34;)
+big_ten &lt;- logs %&gt;% 
+  filter(Conference == &#34;Big Ten Conference&#34;)
+</code></pre><p>Now, we&rsquo;re going to calculate how many offensive plays each Big Ten team had, on average. We&rsquo;ll do this by making a new dataframe called avg_plays. We&rsquo;ll group by Teams (in this case called TeamFull), and summarize their average plays, which will be the mean of their total offensive plays.</p>
+<pre tabindex="0"><code>avg_plays &lt;- big_ten %&gt;%
+  group_by(TeamFull) %&gt;% 
+  summarize(avg_plays = mean(OffensivePlays))
+</code></pre><p>Now, we&rsquo;ll plot this data using ggplot</p>
+<pre tabindex="0"><code>ggplot() + 
+  geom_bar(
+    data=avg_plays,
+    aes(x=reorder(TeamFull, -avg_plays),
+        weight=avg_plays)) + 
+  scale_y_continuous(labels=comma) + 
+  labs(
+    title=&#34;Big Ten Average Offensive Plays 2022&#34;,
+    x=&#34;School&#34;,
+    y=&#34;Average Offensive Plays&#34;) +
+  theme_minimal() + 
+  coord_flip()
+</code></pre><p>This year, Indiana, Northwestern and Illinois are at the top, while Wisconsin, Michigan Sttae, and Iowa (still) are at the bottom.</p>
+
     </div>
   </article>
 
@@ -89,6 +139,18 @@
 
     </div>
     
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
 
     
 
