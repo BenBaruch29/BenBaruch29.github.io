@@ -6,7 +6,25 @@
     <description>Recent content on Ben Baruch&#39;s Sports Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 13 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://BenBaruch29.github.io/sportsblog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 19 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://BenBaruch29.github.io/sportsblog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>First Play Interceptions</title>
+      <link>https://BenBaruch29.github.io/sportsblog/2022/10/19/first-play-interceptions/</link>
+      <pubDate>Wed, 19 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://BenBaruch29.github.io/sportsblog/2022/10/19/first-play-interceptions/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>About Ben Baruch</title>
+      <link>https://BenBaruch29.github.io/sportsblog/about/</link>
+      <pubDate>Thu, 13 Oct 2022 21:48:51 -0700</pubDate>
+      
+      <guid>https://BenBaruch29.github.io/sportsblog/about/</guid>
+      <description>This is a &amp;ldquo;hello world&amp;rdquo; example website for the blogdown package. The theme was forked from @jrutheiser/hugo-lithium-theme and modified by Yihui Xie.</description>
+    </item>
+    
     <item>
       <title>B10 Average Offensive Plays</title>
       <link>https://BenBaruch29.github.io/sportsblog/2022/10/13/b10-average-offensive-plays/</link>
