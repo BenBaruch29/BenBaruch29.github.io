@@ -22,6 +22,11 @@
 
 
 
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
 <link rel="stylesheet" href="/sportsblog/css/fonts.css" media="all">
 <link rel="stylesheet" href="/sportsblog/css/main.css" media="all">
 
@@ -57,7 +62,7 @@
 
   <article class="article">
     
-    <span class="article-duration">0 min read</span>
+    <span class="article-duration">5 min read</span>
     
 
     <h1 class="article-title">First Play Interceptions</h1>
@@ -70,6 +75,125 @@
       
 
 
+<p>In this assignment, we’ll investigate Indiana’s turnover on the first play of the drive and see how rare that is in college football in the year 2022.</p>
+<pre class="r"><code>seasons &lt;- 2014:cfbfastR:::most_recent_cfb_season()
+progressr::with_progress({
+     pbp &lt;- cfbfastR::load_cfb_pbp(seasons)
+})
+                                                                                                                             
+tictoc::toc()
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+## ✔ ggplot2 3.3.6      ✔ purrr   0.3.5 
+## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+## ✔ readr   2.1.3      ✔ forcats 0.5.2 
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>first_play_data &lt;- pbp %&gt;% 
+  filter(half == 1, half_play_number == 2)
+head(first_play_data)</code></pre>
+<pre><code>## ────────────────────────────────────────────────────────────── cfbfastR 1.9.3 ──</code></pre>
+<pre><code>## # A tibble: 6 × 331
+##    year  week id_play   game_id game_p…¹ half_…² drive…³ pos_t…⁴ def_p…⁵ pos_t…⁶
+##   &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;int&gt;
+## 1  2014     1 4.01e17 400547640        2       2       2 Temple  Vander…       0
+## 2  2014     1 4.01e17 400547641        2       2       2 BYU     Connec…       0
+## 3  2014     1 4.01e17 400547642        2       2       2 UCF     Penn S…       0
+## 4  2014     1 4.01e17 400547643        2       2       2 East C… North …       0
+## 5  2014     1 4.01e17 400547644        2       2       2 Houston UT San…       0
+## 6  2014     1 4.01e17 400547645        2       2       2 Memphis Austin…       0
+## # … with 321 more variables: def_pos_team_score &lt;int&gt;, half &lt;dbl&gt;,
+## #   period &lt;int&gt;, clock.minutes &lt;int&gt;, clock.seconds &lt;int&gt;, play_type &lt;chr&gt;,
+## #   play_text &lt;chr&gt;, down &lt;dbl&gt;, distance &lt;dbl&gt;, yards_to_goal &lt;dbl&gt;,
+## #   yards_gained &lt;dbl&gt;, EPA &lt;dbl&gt;, ep_before &lt;dbl&gt;, ep_after &lt;dbl&gt;, wpa &lt;dbl&gt;,
+## #   wp_before &lt;dbl&gt;, wp_after &lt;dbl&gt;, def_wp_before &lt;dbl&gt;, def_wp_after &lt;dbl&gt;,
+## #   penalty_detail &lt;chr&gt;, yds_penalty &lt;dbl&gt;, penalty_1st_conv &lt;lgl&gt;,
+## #   new_series &lt;dbl&gt;, firstD_by_kickoff &lt;dbl&gt;, firstD_by_poss &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>first_play_type &lt;- first_play_data %&gt;% 
+  group_by(play_type) %&gt;% 
+  summarize(total = n())
+head(first_play_type)</code></pre>
+<pre><code>## # A tibble: 6 × 2
+##   play_type                            total
+##   &lt;chr&gt;                                &lt;int&gt;
+## 1 Field Goal Good                          6
+## 2 Field Goal Missed                        1
+## 3 Fumble Recovery (Opponent)              55
+## 4 Fumble Recovery (Opponent) Touchdown     1
+## 5 Fumble Recovery (Own)                   35
+## 6 Interception Return                     45</code></pre>
+<p>Since 2014, there have been 7703 plays from scrimmage as the first play of the drive. I set the half play number to 2 instead of 1 since play 1 is the kickoff. Of those 7703 plays, there were 22 types of plays, the most common of which was a rush.</p>
+<p>Since we’re investigating Bazelak’s interception, let’s find out how many passing plays there were (receptions, in completions, sacks, int, rec. TD, int. return TD)</p>
+<pre class="r"><code>passing_first_play &lt;- first_play_type %&gt;%
+  filter(play_type == &quot;Interception Return Touchdown&quot; | play_type == &quot;Pass Incompletion&quot; | play_type == &quot;Pass Reception&quot; | play_type == &quot;Passing Touchdown&quot; | play_type == &quot;Sack&quot; | play_type == &quot;Interception Return&quot;)
+
+passing_first_play %&gt;% summarize(count= sum(total))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   count
+##   &lt;int&gt;
+## 1  3264</code></pre>
+<p>Of those 7703 first drive plays, 3264 were passing plays. Zooming back out, let’s see how many of these plays were interceptions.</p>
+<pre class="r"><code>interception_first_play &lt;- first_play_type %&gt;% 
+  filter(play_type == &quot;Interception Return Touchdown&quot; | play_type == &quot;Interception Return&quot;)
+
+interception_first_play %&gt;% summarize(count= sum(total))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   count
+##   &lt;int&gt;
+## 1    53</code></pre>
+<p>Only 53 out of 3264 passing plays on the first play of the game have resulted in interceptions (about 1.6%). So yes, this is an incredibly rare scenario. It’s even rarer if we consider that passing plays account for less than half of first plays.</p>
+<p>Another angle we can examine is how many times per year does this happen?</p>
+<pre class="r"><code>first_play_year &lt;- first_play_data %&gt;% 
+  group_by(play_type, year) %&gt;% 
+  summarize(total = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;play_type&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>head(first_play_year)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+## # Groups:   play_type [3]
+##   play_type                   year total
+##   &lt;chr&gt;                      &lt;dbl&gt; &lt;int&gt;
+## 1 Field Goal Good             2016     1
+## 2 Field Goal Good             2022     5
+## 3 Field Goal Missed           2022     1
+## 4 Fumble Recovery (Opponent)  2014     8
+## 5 Fumble Recovery (Opponent)  2015     2
+## 6 Fumble Recovery (Opponent)  2016     6</code></pre>
+<pre class="r"><code>first_play_year_int &lt;- first_play_year %&gt;%
+  filter(play_type == &quot;Interception Return Touchdown&quot; | play_type == &quot;Interception Return&quot;)
+head(first_play_year_int)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+## # Groups:   play_type [1]
+##   play_type            year total
+##   &lt;chr&gt;               &lt;dbl&gt; &lt;int&gt;
+## 1 Interception Return  2014     6
+## 2 Interception Return  2015     7
+## 3 Interception Return  2016     5
+## 4 Interception Return  2017     5
+## 5 Interception Return  2018     3
+## 6 Interception Return  2019     4</code></pre>
+<p>Going off the results of our interception_first_play dataset, the average amount of interceptions (w/o TD) per year (8) is about 5.625, and there’s about 1 interception returned for a touchdown every year in the time frame given. What we find from our first_play_year_int query, however, is that 2022 has seen 12 first play interceptions already, and another one that’s resulted in a TD.</p>
+<p>One final thing to investigate is who is throwing these first play interceptions most often.</p>
+<pre class="r"><code>first_play_int_team &lt;- first_play_data %&gt;% 
+  group_by(play_type, pos_team) %&gt;%
+  filter(play_type == &quot;Interception Return Touchdown&quot; | play_type == &quot;Interception Return&quot;) %&gt;%
+  summarize(total = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;play_type&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>head(first_play_int_team)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+## # Groups:   play_type [1]
+##   play_type           pos_team        total
+##   &lt;chr&gt;               &lt;chr&gt;           &lt;int&gt;
+## 1 Interception Return Alabama             1
+## 2 Interception Return Ball State          2
+## 3 Interception Return Bethune-Cookman     1
+## 4 Interception Return Boston College      1
+## 5 Interception Return Bowling Green       1
+## 6 Interception Return BYU                 1</code></pre>
+<p>What I found is that 40 different teams threw an interception on the first play of the drive, and another eight threw a pick for a TD. Of the 40 teams that threw at least one pick, five of them did it more than once. One of those teams, coincidentally, was Indiana.</p>
 
     </div>
   </article>
@@ -92,6 +216,18 @@
 
     </div>
     
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
 
     
 
