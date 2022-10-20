@@ -77,10 +77,10 @@
 
 <pre class="r"><code>library(tidyverse)</code></pre>
 <pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-## ✔ ggplot2 3.3.6      ✔ purrr   0.3.4 
+## ✔ ggplot2 3.3.6      ✔ purrr   0.3.5 
 ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-## ✔ tidyr   1.2.0      ✔ stringr 1.4.1 
-## ✔ readr   2.1.2      ✔ forcats 0.5.2 
+## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+## ✔ readr   2.1.3      ✔ forcats 0.5.2 
 ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
@@ -88,24 +88,23 @@
 library(waffle)</code></pre>
 <p>As always, we start by loading and checking the data.</p>
 <pre class="r"><code>logs &lt;- read_csv(&quot;https://raw.githubusercontent.com/dwillis/NCAAWomensVolleyballData/main/data/ncaa_womens_volleyball_matchstats_2022.csv&quot;)</code></pre>
-<pre><code>## Rows: 6077 Columns: 36
+<pre><code>## Rows: 6687 Columns: 36
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
-## chr   (3): team, opponent, home_away
+## chr   (4): team, opponent, home_away, result
 ## dbl  (31): team_score, opponent_score, s, kills, errors, total_attacks, hit_...
-## lgl   (1): result
 ## date  (1): date
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <pre class="r"><code>glimpse(logs)</code></pre>
-<pre><code>## Rows: 6,077
+<pre><code>## Rows: 6,687
 ## Columns: 36
 ## $ date                    &lt;date&gt; 2022-08-26, 2022-08-26, 2022-08-27, 2022-08-3…
 ## $ team                    &lt;chr&gt; &quot;A&amp;M-Corpus Christi Islanders&quot;, &quot;A&amp;M-Corpus Ch…
 ## $ opponent                &lt;chr&gt; &quot;Nebraska&quot;, &quot;Pepperdine&quot;, &quot;Tulsa&quot;, &quot;UTRGV&quot;, &quot;S…
 ## $ home_away               &lt;chr&gt; &quot;Away&quot;, &quot;Away&quot;, &quot;Away&quot;, &quot;Away&quot;, &quot;Home&quot;, &quot;Home&quot;…
-## $ result                  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ result                  &lt;chr&gt; &quot;L&quot;, &quot;L&quot;, &quot;L&quot;, &quot;L&quot;, &quot;L&quot;, &quot;L&quot;, &quot;L&quot;, &quot;L&quot;, &quot;L&quot;, &quot;…
 ## $ team_score              &lt;dbl&gt; 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 2, 0, 2, 1, 3, 0…
 ## $ opponent_score          &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3…
 ## $ s                       &lt;dbl&gt; 3, 3, 5, 5, 3, 3, 3, 3, 3, 3, 5, 3, 5, 4, 3, 3…
