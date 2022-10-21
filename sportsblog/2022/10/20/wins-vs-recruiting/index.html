@@ -62,7 +62,7 @@
 
   <article class="article">
     
-    <span class="article-duration">5 min read</span>
+    <span class="article-duration">6 min read</span>
     
 
     <h1 class="article-title">Wins vs. Recruiting</h1>
@@ -218,7 +218,10 @@ summary(fit)</code></pre>
 ## Residual standard error: 2.806 on 348 degrees of freedom
 ## Multiple R-squared:  0.1354, Adjusted R-squared:  0.1329 
 ## F-statistic: 54.49 on 1 and 348 DF,  p-value: 1.161e-12</code></pre>
-<p>Turns out recruiting rating doesn’t have so much of an effect on a team’s total wins. It only explains about 13% of total_wins.</p>
+<p>Turns out recruiting rating doesn’t have so much of an effect on a team’s total wins. It only explains about 13% of total_wins. The p-value is also way higher than .05, which means there is no statistically significant relationship. The model is off by as much as about 6 wins more/less than the median. That could be half of a team’s season. We can reasonably conclude that recruiting class alone doesn’t explain the amount of wins a college football team accumulates in a season.</p>
+<p>Maryland is a great example of this. There are only two instances where Maryland’s wins and recruiting rating plot near our model’s line of best fit. If the model was good at predicting wins, more of Maryland’s seasons would end up near that line. Instead, most of the other seasons miss the mark by about three wins. There’s even a season where the model missed by five wins.</p>
+<p>This analysis obviously begs some questions. Why aren’t recruiting classes always panning out? Or what teams are the best at capitalizing on strong recruitments? We can also try and learn which schools are doing well without flashy five-star recruits. Our recruiting rating includes three-star recruits. Do they matter as much as five star recruits? What’s the practical difference between a four and five-star recruit? All these questions could be answered with the exact same data.</p>
+<p>Perhaps a way to salvage this project could be to analyze which teams are getting points from new recruits, at least the offensive ones. We can also measure the defensive performance of new recruits and their overall impact on the team. We can also try and figure out which teams are consistently attracting the best recruits, and if they’re helping their team win games.</p>
 
     </div>
   </article>
