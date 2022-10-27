@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.104.3" />
+
+
+<title>Maryland Football YPP - Ben Baruch&#39;s Sports Blog</title>
+<meta property="og:title" content="Maryland Football YPP - Ben Baruch&#39;s Sports Blog">
+
+
+  <link href='https://BenBaruch29.github.io/sportsblog/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/sportsblog/css/fonts.css" media="all">
+<link rel="stylesheet" href="/sportsblog/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/sportsblog/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/sportsblog/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">4 min read</span>
+    
+
+    <h1 class="article-title">Maryland Football YPP</h1>
+
+    
+    <span class="article-date">2022-10-25</span>
+    
+
+    <div class="article-content">
+      
+
+
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+## ✔ ggplot2 3.3.6      ✔ purrr   0.3.5 
+## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+## ✔ readr   2.1.3      ✔ forcats 0.5.2 
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(ggrepel)
+logs &lt;- read.csv(&quot;C:/Users/benba/OneDrive/Documents/479xblogs/sportsblog/footballlogs1122.csv&quot;)</code></pre>
+<pre class="r"><code>winlosslogs &lt;- logs %&gt;% 
+  mutate(
+    wins = case_when(
+      grepl(&quot;W&quot;, Outcome) ~ 1, 
+      grepl(&quot;L&quot;, Outcome) ~ 0)
+)</code></pre>
+<p>In order to make this data work with a bubble chart (and use larger bubbles to represent more wins), we need to define each win as a numerical value of 1 and each loss as a numerical value of 0.</p>
+<pre class="r"><code>winlosslogs %&gt;% 
+  group_by(Team, Conference, Season) %&gt;% 
+  summarise(
+    TotalPlays = sum(OffensivePlays), 
+    TotalYards = sum(OffensiveYards), 
+    DefensivePlays = sum(DefPlays), 
+    DefensiveYards = sum(DefYards), 
+    TotalWins = sum(wins)) %&gt;% 
+  mutate(
+    OffensiveYPP = TotalYards/TotalPlays, 
+    DefensiveYPP = DefensiveYards/DefensivePlays) -&gt; ypp</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Team&#39;, &#39;Conference&#39;. You can override
+## using the `.groups` argument.</code></pre>
+<p>Offensive and defensive yards per play are self explainatory, but we had to create those metrics using only the data we had available to us. Mutate was helpful here.</p>
+<pre class="r"><code>ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins)
+    )</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/25/maryland-football-ypp/index_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+This is what the data looks like once it’s plotted on a bubble chart. Now, we’re going to single out Maryland, specifically each season since 2011-12.</p>
+<pre class="r"><code>Maryland &lt;- ypp %&gt;% filter(Team == &quot;Maryland&quot;)</code></pre>
+<pre class="r"><code>ypp %&gt;% 
+  ungroup() %&gt;% 
+  summarise(
+    offense = mean(OffensiveYPP), 
+    defense = mean(DefensiveYPP)
+    )</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   offense defense
+##     &lt;dbl&gt;   &lt;dbl&gt;
+## 1    5.74    5.61</code></pre>
+<pre class="r"><code>ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color=&quot;grey&quot;, 
+    alpha=.5) + 
+  geom_point(
+    data=Maryland, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color=&quot;red&quot;) + 
+  geom_vline(xintercept = 5.740913) + 
+  geom_hline(yintercept = 5.612793) +
+  geom_text_repel(
+    data=Maryland, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Season)
+  )   +
+labs(title=&quot;Maryland&#39;s Offensive and Defensive Yards Per Play&quot;, subtitle=&quot;How the Terps have fared over the past 10 years&quot;, caption=&quot;Source: NCAA | By Ben Baruch&quot;)  + theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/25/maryland-football-ypp/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The Maryland Terrapins’ offense is clicking better than it has at any point in the last decade.</p>
+<p>The 6-2 Terps are averaging over seven yards per play, and are bowl-eligible before Halloween. Last season, they didn’t become bowl eligible until the final week of the regular season.</p>
+<p>For a while, Maryland was a middling team with NCAA-average offense and defense at best. But things are different this year. They’ve differentiated themselves as a team with tremendous offensive firepower.</p>
+<p>Not only that, they’ve tightened up defensively too. Compared to last season, when Maryland clinched a bowl appearance (and won it), Maryland’s allowing almost one less yard per play. Over the course of a game, that adds up. Over the course of a season, it adds up to wins.</p>
+<p>Most of college football’s winsomest teams excel on both sides of the football. The bigger the bubbles get on the chart above, the more wins they’ve accumulated. Note the abundance of large bubbles in the bottom-right quadrant of the plot, where this season’s iteration of the Terps are located. There are far more smaller bubbles on the left side of the graph. Even good defensive teams struggle to win games.</p>
+<p>A great example of that is the 2012-13 Terps. Maryland’s final season in the ACC ended with a bowl game win, but the Terps struggled in ACC conference play. The competition wasn’t overly fierce, except for no. 1 Florida State and no. 8 Clemson. The Terps were relatively responsible defensively, but their offense couldn’t bail them out.</p>
+<p>With six more games to go for the Terps this season, they’ll have to keep up their strong start if they want to fulfill coach Mike Locksley’s vision of “closing the gap” between them and the top of the Big Ten. They’ll face no. 13 Penn State and no. 2 Ohio State in two of their final four regular season games.</p>
+<p>Regardless of the results of those games, the early season success of the Terrpains is promising, and their offense should continue to entertain for the rest of the season.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/sportsblog/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/sportsblog/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+
