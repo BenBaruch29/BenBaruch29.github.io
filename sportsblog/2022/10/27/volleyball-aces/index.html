@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.104.3" />
+
+
+<title>Volleyball Aces - Ben Baruch&#39;s Sports Blog</title>
+<meta property="og:title" content="Volleyball Aces - Ben Baruch&#39;s Sports Blog">
+
+
+  <link href='https://BenBaruch29.github.io/sportsblog/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/sportsblog/css/fonts.css" media="all">
+<link rel="stylesheet" href="/sportsblog/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/sportsblog/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/sportsblog/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">6 min read</span>
+    
+
+    <h1 class="article-title">Volleyball Aces</h1>
+
+    
+    <span class="article-date">2022-10-27</span>
+    
+
+    <div class="article-content">
+      
+
+
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(ggbeeswarm)
+library(ggrepel)
+logs &lt;- read.csv(&quot;C:/Users/benba/OneDrive/Documents/479xblogs/sportsblog/ncaa_womens_volleyball_playerstats_2022.csv&quot;)
+head(logs)</code></pre>
+<pre><code>##                           team season jersey       full_name     roster_name
+## 1 A&amp;M-Corpus Christi Islanders   2022     23     Zoria Heard    Heard, Zoria
+## 2 A&amp;M-Corpus Christi Islanders   2022     12    Halle Gibson   Gibson, Halle
+## 3 A&amp;M-Corpus Christi Islanders   2022     33    Tayah Little   Little, Tayah
+## 4 A&amp;M-Corpus Christi Islanders   2022      9    Kyndal Payne   Payne, Kyndal
+## 5 A&amp;M-Corpus Christi Islanders   2022      7    Leah Stolfus   Stolfus, Leah
+## 6 A&amp;M-Corpus Christi Islanders   2022      5  Carissa Barnes Barnes, Carissa
+##   last_name first_name yr pos feet inches gp gs mp  s ms kills errors
+## 1     Heard      Zoria Fr   L    5      6 25  8 25 85 NA     4      3
+## 2    Gibson      Halle Fr   S    5      9 25  4 25 74 NA    22      3
+## 3    Little      Tayah Fr  MB    5      9 25 23 25 84 NA   122     62
+## 4     Payne     Kyndal So  OH    5     11 25 25 25 90 NA   331    141
+## 5   Stolfus       Leah So  MB    6      0 25 25 25 89 NA   245     65
+## 6    Barnes    Carissa Sr   L    5      7 25  0 25 90 NA     1      1
+##   total_attacks hit_pct assists aces s_err digs r_err block_solos block_assists
+## 1            18   0.056      20   17    25  193     9           0             0
+## 2            64   0.297     147    9    18   68     1           0             5
+## 3           302   0.199      12    2     5   40     3          11            41
+## 4           907   0.209      61   10    23  249    29          16            22
+## 5           565   0.319      25    5    11   82     2          13            32
+## 6             8   0.000      77   35    31  464    23           0             0
+##   b_err total_blocks   pts bhe trpl_dbl
+## 1     0           NA  21.0   0        0
+## 2     1           NA  33.5   6        0
+## 3     2           NA 155.5   4        0
+## 4     4           NA 368.0   2        0
+## 5     3           NA 279.0   2        0
+## 6     0           NA  36.0   0        0</code></pre>
+<p>Now that we’ve loaded the data, let’s filter out players who haven’t played so much, don’t have a defined position, and haven’t been acing serves.</p>
+<pre class="r"><code>real_players &lt;- logs %&gt;% filter(mp &gt; 19, pos != &quot;NA&quot;, aces != 0)</code></pre>
+<p>We also need to create the aces per match using mutate.</p>
+<pre class="r"><code>aces_per_match &lt;- real_players %&gt;% mutate(
+  apm = aces/gp
+)</code></pre>
+<pre class="r"><code>summary(aces_per_match$aces)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1.00    9.00   15.00   15.58   21.00   78.00</code></pre>
+<p>We’re going to restrict our final chart to only the best of the best servers in college volleyball. From this query, we find that the top 25% of servers hit 21 or more aces, with the max being 78. So we’ll make a new dataframe that restrcits the number of aces to 21 or more. That’s the dataframe we’ll use for our chart.</p>
+<pre class="r"><code>good_servers &lt;- aces_per_match %&gt;% filter(
+  aces &gt;= 21
+)</code></pre>
+<pre class="r"><code>ggplot() + geom_beeswarm(data=good_servers, aes(x=pos, y=apm), color=&quot;grey&quot;)</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/27/volleyball-aces/index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+And now let’s fill in Maryland, as well as all the other labels we need.</p>
+<pre class="r"><code>UMD_volleyball &lt;- good_servers %&gt;% filter(
+  team == &quot;Maryland Terrapins, Terps&quot;
+)</code></pre>
+<pre class="r"><code>ggplot() + 
+  geom_beeswarm(
+    data=good_servers, 
+    aes(x=pos, y=apm), 
+    color=&quot;grey&quot;) +
+  geom_beeswarm(
+    data=UMD_volleyball, 
+    groupOnX=TRUE, 
+    aes(x=pos, y=apm), color=&quot;red&quot;) +
+  geom_text_repel(
+    data=UMD_volleyball, 
+    aes(x=pos, y=apm, label=full_name)) +
+  labs(title=&quot;Best Voleyball Servers By Position&quot;, subtitle=&quot;Which positions rack up the most aces per serve, and where does Maryland rank among the NCAA&#39;s best?&quot;, caption=&quot;Source: NCAA | By Ben Baruch&quot;)  + theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = &quot;bold&quot;),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/27/volleyball-aces/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+As someone who has limited knowledge of volleyball, and servers, I wonder if Maryland is unique in having four players make this chart. Are they above, below or right around average?</p>
+<pre class="r"><code>good_servers %&gt;% group_by(team) %&gt;%
+  summarise(
+    total = n()
+  ) %&gt;% arrange(desc(total))</code></pre>
+<pre><code>## # A tibble: 243 × 2
+##    team                  total
+##    &lt;chr&gt;                 &lt;int&gt;
+##  1 Providence Friars         5
+##  2 UNI Panthers              5
+##  3 Ball St. Cardinals        4
+##  4 Bowling Green Falcons     4
+##  5 Delaware St. Hornets      4
+##  6 Green Bay Phoenix         4
+##  7 Hofstra Pride             4
+##  8 Indiana Hoosiers          4
+##  9 Iona Gaels                4
+## 10 IUPUI Jaguars             4
+## # … with 233 more rows</code></pre>
+<p>The downside of charts like this is it’s hard to see exactly how many of each type there are. We can use another summarize query to get exact totals.</p>
+<pre class="r"><code>good_servers %&gt;% group_by(pos) %&gt;%
+  summarise(
+    total = n()
+  ) %&gt;% arrange(desc(total))</code></pre>
+<pre><code>## # A tibble: 9 × 2
+##   pos   total
+##   &lt;chr&gt; &lt;int&gt;
+## 1 OH      183
+## 2 S       119
+## 3 L/DS     52
+## 4 MB       44
+## 5 DS       38
+## 6 L        30
+## 7 RS        6
+## 8 OPP       4
+## 9 MH        3</code></pre>
+<p>Despite a less-than-flashy 12-10 record, Maryland volleyball can boast about its above-average serving.</p>
+<p>Maryland is one of only 20 teams in the NCAA to feature four different servers with at least 21 aces. For context, only the top 25% of servers in the NCAA have accumulated 21. The average is about 15 and the highest is 78 (Andrea Tsvetanova, Coppin State).</p>
+<p>Maryland’s top four are Erin Engel (24), Milan Gomilion (26), Laila Ricks (29) and Sydney Dowler (37). Each of them account for at least one ace per game, on average. Dowler is the highest with about 1.7</p>
+<p>It also appears that everyone besides Engel is in the top of the top 25%. Engel falls in an area with a higher frequency of dots, which means she’s closer to the average. The higher up you go, the more impressive your aces per match rate. It looks like Gomilion, Ricks and Dowler all fall in this category.</p>
+<p>However, it doesn’t appear as though having players with ace per serve metrics means much for team success. Of the top four ace-per-match players in the NCAA, only the top ranked Tsvetanova plays for a team with a record well above .500. The other four teams are either much closer to even or below-.500.</p>
+<p>The same is true for the two teams with 5 well above average servers. Providence is a below .500 team while UNI is well above it. It’s hard to determine if there’s correlation here, especially since the available data is per player, not per team.</p>
+<p>What the data does tell us, however, is what positions usually do the best serving. Outside hitters make up the most above average servers, followed by setters. Maryland has two setters in the top 25%: Engel and Dowler. Tsvetanova is also a setter. Then L/DS, MB, DS and L each have between 30 and 52, so not too much discrepancy there. It’s also important to note that a lot of players, even some on this list, can play more positions than the ones outlined in this data set.</p>
+<p>Coaches have limited control over rotations, so getting the best servers out against an opponent’s weakest defense can lead to easy points through aces. This graphic does a good job pointing out who is most effective, and where they could be found on the volleyball court.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/sportsblog/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/sportsblog/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
