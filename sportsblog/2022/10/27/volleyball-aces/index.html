@@ -131,7 +131,7 @@ head(logs)</code></pre>
   aces &gt;= 21
 )</code></pre>
 <pre class="r"><code>ggplot() + geom_beeswarm(data=good_servers, aes(x=pos, y=apm), color=&quot;grey&quot;)</code></pre>
-<p><img src="/sportsblog/2022/10/27/volleyball-aces/index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/27/volleyball-aces/index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 And now let’s fill in Maryland, as well as all the other labels we need.</p>
 <pre class="r"><code>UMD_volleyball &lt;- good_servers %&gt;% filter(
   team == &quot;Maryland Terrapins, Terps&quot;
@@ -155,7 +155,7 @@ And now let’s fill in Maryland, as well as all the other labels we need.</p>
     plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     )</code></pre>
-<p><img src="/sportsblog/2022/10/27/volleyball-aces/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/27/volleyball-aces/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 As someone who has limited knowledge of volleyball, and servers, I wonder if Maryland is unique in having four players make this chart. Are they above, below or right around average?</p>
 <pre class="r"><code>good_servers %&gt;% group_by(team) %&gt;%
   summarise(

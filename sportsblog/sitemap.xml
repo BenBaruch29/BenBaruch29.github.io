@@ -2,13 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://BenBaruch29.github.io/sportsblog/</loc>
-    <lastmod>2022-11-01T00:00:00+00:00</lastmod>
+    <loc>https://BenBaruch29.github.io/sportsblog/2022/11/10/are-college-teams-passing-more-on-first-down/</loc>
+    <lastmod>2022-11-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://BenBaruch29.github.io/sportsblog/2022/11/01/nfl-redzone-epa-reverse-engineering/</loc>
-    <lastmod>2022-11-01T00:00:00+00:00</lastmod>
+    <loc>https://BenBaruch29.github.io/sportsblog/</loc>
+    <lastmod>2022-11-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://BenBaruch29.github.io/sportsblog/post/</loc>
+    <lastmod>2022-11-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://BenBaruch29.github.io/sportsblog/2022/11/01/nfl-redzone-epa-reverse-engineering/</loc>
     <lastmod>2022-11-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://BenBaruch29.github.io/sportsblog/2022/10/27/volleyball-aces/</loc>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.104.3" />
+
+
+<title>Are College Teams Passing More on First Down? - Ben Baruch&#39;s Sports Blog</title>
+<meta property="og:title" content="Are College Teams Passing More on First Down? - Ben Baruch&#39;s Sports Blog">
+
+
+  <link href='https://BenBaruch29.github.io/sportsblog/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/sportsblog/css/fonts.css" media="all">
+<link rel="stylesheet" href="/sportsblog/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/sportsblog/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/sportsblog/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">4 min read</span>
+    
+
+    <h1 class="article-title">Are College Teams Passing More on First Down?</h1>
+
+    
+    <span class="article-date">2022-11-10</span>
+    
+
+    <div class="article-content">
+      
+
+
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+## ✔ ggplot2 3.3.6      ✔ purrr   0.3.5 
+## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+## ✔ readr   2.1.3      ✔ forcats 0.5.2 
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(cfbfastR)
+library(ggalt)</code></pre>
+<pre><code>## Registered S3 methods overwritten by &#39;ggalt&#39;:
+##   method                  from   
+##   grid.draw.absoluteGrob  ggplot2
+##   grobHeight.absoluteGrob ggplot2
+##   grobWidth.absoluteGrob  ggplot2
+##   grobX.absoluteGrob      ggplot2
+##   grobY.absoluteGrob      ggplot2</code></pre>
+<pre class="r"><code>tictoc::tic()
+pbp &lt;- data.frame()
+seasons &lt;- 2014:cfbfastR:::most_recent_cfb_season()
+progressr::with_progress(
+  {
+    
+    pbp &lt;- cfbfastR::load_cfb_pbp(seasons)
+  })
+tictoc::toc()</code></pre>
+<pre><code>## 58.16 sec elapsed</code></pre>
+<p>What do teams like to do with a fresh set of downs? Do they run or pass the ball? Since first down is always at least 10 yards, perhaps teams would try and pass in hopes of getting bodies down field faster. But that really only happens about 33% of the time, and it’s been like that for a while.</p>
+<pre class="r"><code>first_down &lt;- pbp %&gt;% filter(down == 1)
+passing_first_down &lt;- first_down %&gt;% filter(pass == 1)
+pass_play_pct &lt;- first_down %&gt;% group_by(year) %&gt;% summarize(
+  total_first_down = sum(down),
+  total_first_down_pass = sum(pass)
+) %&gt;% mutate(
+  first_down_pass_pct = total_first_down_pass / total_first_down
+)</code></pre>
+<pre class="r"><code>ggplot() + 
+  geom_line(data=pass_play_pct, aes(x=year, y=first_down_pass_pct)) + 
+  scale_y_continuous(limits = c(0, .7))</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/10/are-college-teams-passing-more-on-first-down/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>This graph shows the average first down pass percentage in all of college football in the last eight years. There hasn’t been much change. Teams will try and throw the ball just over 30% of the time on first down, which means the majority of the rest has consistently been running plays.</p>
+<p>This doesn’t mean that every pass has been received. It just shows how many times teams attempted a pass on first down. That includes pass receptions, incompletions, fumble recoveries (from pass plays), and sacks.</p>
+<p>However, this shows all of NCAA football. Perhaps if we examine single power five conference, and its individual teams, we’ll see a different pattern.</p>
+<pre class="r"><code>Big_Ten_pass &lt;- pbp %&gt;% filter(down == 1, pass == 1, offense_conference == &quot;Big Ten&quot; | defense_conference == &quot;Big Ten&quot;)
+Big_Ten &lt;- pbp %&gt;% filter(down == 1, offense_conference == &quot;Big Ten&quot; | defense_conference == &quot;Big Ten&quot;)
+
+Big_Ten_Teams &lt;- c(&quot;Maryland&quot;, &quot;Nebraska&quot;, &quot;Michigan&quot;, &quot;Ohio State&quot;, &quot;Penn State&quot;, &quot;Michigan State&quot;, &quot;Rutgers&quot;, &quot;Indiana&quot;, &quot;Illinois&quot;, &quot;Iowa&quot;, &quot;Wisconsin&quot;, &quot;Purdue&quot;, &quot;Minnesota&quot;, &quot;Northwestern&quot;)
+
+Big_Ten_pass_play_pct &lt;- Big_Ten %&gt;% group_by(pos_team, year) %&gt;% filter(pos_team == &quot;Maryland&quot; | pos_team == &quot;Nebraska&quot; | pos_team == &quot;Michigan&quot; | pos_team == &quot;Ohio State&quot; | pos_team == &quot;Penn State&quot; | pos_team == &quot;Michigan State&quot; | pos_team == &quot;Rutgers&quot; | pos_team == &quot;Indiana&quot; | pos_team == &quot;Illinois&quot; | pos_team == &quot;Iowa&quot; | pos_team == &quot;Wisconsin&quot; | pos_team == &quot;Purdue&quot; | pos_team == &quot;Minnesota&quot; | pos_team == &quot;Northwestern&quot;) %&gt;% summarize(
+  total_first_down = sum(down),
+  total_first_down_pass = sum(pass)
+) %&gt;% mutate(
+  first_down_pass_pct = total_first_down_pass / total_first_down
+)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;pos_team&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<p>In our Big Ten data, I made sure to include games against non-conference opponents as well.</p>
+<pre class="r"><code>ggplot() + 
+  geom_line(data=Big_Ten_pass_play_pct, aes(x=year, y=first_down_pass_pct, group=pos_team)) + 
+  scale_y_continuous(limits = c(0, .7)) + 
+  facet_wrap(~pos_team)</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/10/are-college-teams-passing-more-on-first-down/index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+Aside from a few teams, there hasn’t been any definitive change in which play type is called on first down.</p>
+<p>Indiana is an example of a team that increased its first down passing percentage in the last eight years. They started just above 20%, but now sit around 50%, with a large increase from 2021 to 2022.</p>
+<p>Michigan also saw a spike in its first down passing percentage in 2020. Ohio State increased its first down percentage by about 10% from 2020 to 2021. Two other teams that increased their first down passing percentage are Nebraska and Michigan State.</p>
+<p>But there are examples of teams that also decreased their first down passing percentage. Most notably, Illinois was at just under 40% in 2014 but is currently just under 30%. They were closer to 20% in 2020.</p>
+<p>Wisconsin also decreased its first down passing percentage by about 10% in the last eight years. Penn State, Rutgers and Minnesota are three other teams that have fluctuated their first down passing percentage in the last eight years with no definitive pattern emerging.</p>
+<p>That turned out to be the trend within the Big Ten and the entire NCAA. Opposing defenses can expect a passing play 3 out of every 10 first downs.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/sportsblog/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/sportsblog/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+
