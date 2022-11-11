@@ -112,7 +112,7 @@ logs &lt;- read.csv(&quot;C:/Users/benba/OneDrive/Documents/479xblogs/sportsblog
     data=ypp, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins)
     )</code></pre>
-<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/25/maryland-football-ypp/index_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<p><img src="/sportsblog/2022/10/25/maryland-football-ypp/index_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 This is what the data looks like once it’s plotted on a bubble chart. Now, we’re going to single out Maryland, specifically each season since 2011-12.</p>
 <pre class="r"><code>Maryland &lt;- ypp %&gt;% filter(Team == &quot;Maryland&quot;)</code></pre>
 <pre class="r"><code>ypp %&gt;% 
@@ -148,7 +148,7 @@ labs(title=&quot;Maryland&#39;s Offensive and Defensive Yards Per Play&quot;, su
     plot.subtitle = element_text(size=10), 
     panel.grid.minor = element_blank()
     )</code></pre>
-<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/25/maryland-football-ypp/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="/sportsblog/2022/10/25/maryland-football-ypp/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>The Maryland Terrapins’ offense is clicking better than it has at any point in the last decade.</p>
 <p>The 6-2 Terps are averaging over seven yards per play, and are bowl-eligible before Halloween. Last season, they didn’t become bowl eligible until the final week of the regular season.</p>
 <p>For a while, Maryland was a middling team with NCAA-average offense and defense at best. But things are different this year. They’ve differentiated themselves as a team with tremendous offensive firepower.</p>

@@ -165,7 +165,7 @@ waffle(
     xlab=&quot;1 square = 1 point&quot;, 
     colors = c(&quot;black&quot;, &quot;red&quot;, &quot;yellow&quot;)
 )</code></pre>
-<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/13/volleyball-waffle-chart/index_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<p><img src="/sportsblog/2022/10/13/volleyball-waffle-chart/index_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 The graph shows that Maryland scores most of its points off kills. Aces and blocks combined make up less than half of Maryland’s total offense this season. But how do they compare to other Big Ten teams? Let’s redo the process with 14-1 (6-0) Nebraska.</p>
 <pre class="r"><code>NU &lt;- logs %&gt;% 
   filter(team == &quot;Nebraska Cornhuskers&quot;) %&gt;% 
@@ -190,7 +190,7 @@ waffle(
     xlab=&quot;1 square = 1 point&quot;, 
     colors = c(&quot;red&quot;, &quot;black&quot;, &quot;grey&quot;)
 )</code></pre>
-<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/13/volleyball-waffle-chart/index_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<p><img src="/sportsblog/2022/10/13/volleyball-waffle-chart/index_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 This looks very similar to Maryland. Again, most of Nebraska’s points are coming off kills. Let’s put Maryland and Nebraska side-by-side</p>
 <pre class="r"><code>iron(
   waffle(
@@ -208,7 +208,7 @@ This looks very similar to Maryland. Again, most of Nebraska’s points are comi
     colors = c(&quot;red&quot;, &quot;black&quot;, &quot;grey&quot;)
 )
 )</code></pre>
-<p><img src="https://BenBaruch29.github.io/sportsblog/2022/10/13/volleyball-waffle-chart/index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="/sportsblog/2022/10/13/volleyball-waffle-chart/index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p>Side by side, it seems like there is a good chunk of extra points Nebraska is scoring off kills as opposed to Maryland. Still, both teams score the vast majority of their points off kills. The main difference between the two teams is the fact that Maryland scored more points than Nebraska. That’s probably because Maryland played more sets than Nebraska. Nevertheless, we’re looking for point distribution (percentage) here, not how many total points each is scoring. Bottom line, both Maryland and Nebraska score their points in similar ways.</p>
 
     </div>
