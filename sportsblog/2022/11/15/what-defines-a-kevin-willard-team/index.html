@@ -62,7 +62,7 @@
 
   <article class="article">
     
-    <span class="article-duration">8 min read</span>
+    <span class="article-duration">9 min read</span>
     
 
     <h1 class="article-title">What Defines a Kevin Willard Team?</h1>
@@ -119,6 +119,25 @@ Maryland_SH &lt;- logs %&gt;% filter(TeamFull == &quot;Maryland Terrapins&quot; 
   pct_3 = Opposing_3s / Limiting_Shots
   ) %&gt;% arrange(desc(Total_Points_Against))
 
+Maryland_total &lt;- logs %&gt;% filter(TeamFull == &quot;Maryland Terrapins&quot;) %&gt;% group_by(TeamFull) %&gt;% summarize(
+  Field_Goal_att = sum(TeamFGA),
+  FG_pct = mean(TeamFGPCT),
+  Personal_Fouls = sum(TeamPersonalFouls),
+  Turnovers = sum(TeamTurnovers),
+  Opposing_3s = sum(Opponent3PA),
+  Opposing_FTs = sum(OpponentFTA),
+  Boxing_Out = sum(OpponentOffRebounds),
+  Forcing_Turnovers = sum(OpponentTurnovers),
+  Blocks = sum(TeamBlocks),
+  Limiting_Shots = sum(OpponentFGA),
+  Total_Points_Against = sum(OpponentScore),
+  Total_Points_For = sum(TeamScore),
+  Turnover_Ratio = mean((TeamTurnovers*100/TeamFGA+(TeamFTA*0.44)+TeamAssists+TeamTurnovers))
+  ) %&gt;% mutate(
+  pct_3 = Opposing_3s / Limiting_Shots
+  ) %&gt;% arrange(desc(Total_Points_Against))
+
+
 Maryland &lt;- logs %&gt;% filter(TeamFull == &quot;Maryland Terrapins&quot;) %&gt;% group_by(TeamFull, Conference) %&gt;% summarize(
   Field_Goal_att = sum(TeamFGA),
   FG_pct = mean(TeamFGPCT),
@@ -162,9 +181,10 @@ Seton_Hall &lt;- logs %&gt;% filter(TeamFull == &quot;Seton Hall Pirates&quot;) 
 <pre class="r"><code>Turnovers_filter &lt;- Overall_rankings %&gt;% filter(Turnovers &gt; 2000 &amp; Forcing_Turnovers &gt; 2000)
 ggplot() + 
   geom_point(data=Turnovers_filter, aes(x=Turnovers, y=Forcing_Turnovers)) +
-  geom_point(data=Maryland, aes(x=Turnovers, y=Forcing_Turnovers), color = &quot;red&quot;, size = 3) +
+  geom_point(data=Maryland_total, aes(x=Turnovers, y=Forcing_Turnovers), color = &quot;red&quot;, size = 3) +
   geom_point(data=Seton_Hall, aes(x=Turnovers, y=Forcing_Turnovers), color = &quot;blue&quot;, size = 3) +
-  geom_smooth(data=Turnovers_filter, aes(x=Turnovers, y=Forcing_Turnovers), method=&quot;lm&quot;)</code></pre>
+  geom_smooth(data=Turnovers_filter, aes(x=Turnovers, y=Forcing_Turnovers), method=&quot;lm&quot;) + 
+  labs(title=&quot;Seton Hall Forced more Turnovers than UMD&quot;, subtitle=&quot;The Terps turned the ball over just as much, but couldn&#39;t get their opponents to make mistakes&quot;, x=&quot;Turnovers&quot;, y=&quot;Opponent Turnovers&quot;, caption=&quot;Source: NCAA | By Ben Baruch&quot;) </code></pre>
 <p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>Seton Hall falls much closer to NCAA average when it comes to turnover differential. Maryland, on the other hand, has turned the ball over far more than their opponents.</p>
 <p>The media described Willard as aggressive on defense. One way that could manifest on the stat sheet is opponent turnovers.</p>
@@ -186,7 +206,8 @@ ggplot() +
       x=reorder(TeamFull, `Turnover_Differential`), 
       weight=`Turnover_Differential`
       )
-  ) + coord_flip()</code></pre>
+  ) + 
+  labs(title=&quot;Seton Hall Forced more Turnovers than UMD&quot;, subtitle=&quot;The Pirates were one of the better Big East teams in the last 10 years&quot;, x=&quot;Turnover Differential&quot;, y=&quot;Team&quot;, caption=&quot;Source: NCAA | By Ben Baruch&quot;) + coord_flip() </code></pre>
 <p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <pre class="r"><code>Big_Ten_Turnovers &lt;- logs %&gt;% group_by(TeamFull) %&gt;% filter(Season %in% Maryland_Big_Ten, Conference == &quot;Big Ten&quot;) %&gt;% summarize(
   Turnovers = sum(TeamTurnovers),
@@ -202,13 +223,15 @@ ggplot() +
       x=reorder(TeamFull, `Turnover_Differential`), 
       weight=`Turnover_Differential`
       )
-  ) + coord_flip()</code></pre>
+  ) +  
+  labs(title=&quot;Maryland&#39;s Awful Turnover Differential&quot;, subtitle=&quot;The Terps&#39; never fully recovered from their ACC struggles&quot;, x=&quot;Turnover Differential&quot;, y=&quot;Team&quot;, caption=&quot;Source: NCAA | By Ben Baruch&quot;) + coord_flip()</code></pre>
 <p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/index_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
 <pre class="r"><code>Big_Conferences &lt;- Overall_rankings %&gt;% filter(Conference == &quot;Big Ten&quot; | Conference == &quot;Big East&quot;)
 
 ggplot() + geom_beeswarm(data=Big_Conferences, aes(x=Conference, y=Turnover_Ratio), color=&quot;grey&quot;, size = 3) +
   geom_beeswarm(data=Maryland, aes(x=Conference, y=Turnover_Ratio), color = &quot;red&quot;, size = 3) + 
-  geom_beeswarm(data=Seton_Hall, aes(x=Conference, y=Turnover_Ratio), color = &quot;blue&quot;, size = 3) </code></pre>
+  geom_beeswarm(data=Seton_Hall, aes(x=Conference, y=Turnover_Ratio), color = &quot;blue&quot;, size = 3) +  
+  labs(title=&quot;Both Maryland and Seton Hall had High Turnover Ratios&quot;, subtitle=&quot;But Seton Hall was than six of their conference-mates&quot;, x=&quot;Conference&quot;, y=&quot;Turnover Ratio&quot;, caption=&quot;Source: NCAA | By Ben Baruch&quot;)</code></pre>
 <pre><code>## Warning in f(...): The default behavior of beeswarm has changed in version
 ## 0.6.0. In versions &lt;0.6.0, this plot would have been dodged on the y-axis. In
 ## versions &gt;=0.6.0, grouponX=FALSE must be explicitly set to group on y-axis.
@@ -238,7 +261,8 @@ ggplot() +
   geom_beeswarm(data=Big_East_3PA,aes(x=Conference, y=pct_3), color = &quot;grey&quot;, size = 3) +
   geom_beeswarm(data=Big_Ten_3PA,aes(x=Conference, y=pct_3), color = &quot;grey&quot;, size = 3) +
   geom_beeswarm(data=Maryland, aes(x=Conference, y=pct_3), color = &quot;red&quot;, size = 3) + 
-  geom_beeswarm(data=Seton_Hall, aes(x=Conference, y=pct_3), color = &quot;blue&quot;, size = 3)</code></pre>
+  geom_beeswarm(data=Seton_Hall, aes(x=Conference, y=pct_3), color = &quot;blue&quot;, size = 3) + 
+  labs(title=&quot;Seton Hall Doesn&#39;t Allow Three-Pointers&quot;, subtitle=&quot;Maryland, on the other hand, allowed a lot. They were better in the ACC though&quot;, x=&quot;Conference&quot;, y=&quot;Percentage of FGs as 3PA&quot;, caption=&quot;Source: NCAA | By Ben Baruch&quot;)</code></pre>
 <pre><code>## Warning in f(...): The default behavior of beeswarm has changed in version
 ## 0.6.0. In versions &lt;0.6.0, this plot would have been dodged on the y-axis. In
 ## versions &gt;=0.6.0, grouponX=FALSE must be explicitly set to group on y-axis.
