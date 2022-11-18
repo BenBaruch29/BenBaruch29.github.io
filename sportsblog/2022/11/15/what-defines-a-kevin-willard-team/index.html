@@ -177,7 +177,7 @@ Seton_Hall &lt;- logs %&gt;% filter(TeamFull == &quot;Seton Hall Pirates&quot;) 
 <p>Willard’s Pirates also didn’t stand out in any individual category. They usually ranked high - even higher than some teams in their conference - in plenty of the above metrics, but Seton Hall never made waves in the way a Power Five team did. A few metrics that stood out were turnovers, and the lack of three-point attempts the Pirates allowed.</p>
 <p>Perhaps that’s what’s encouraging about Willard. He was able to get Maryland-like numbers, and play a Maryland-like game with a team that was never as talented as the Terps. Seton Hall has only produced four NBA draft picks under Willard’s tenure. None have played over 89 NBA games.</p>
 <p>Maryland, on the other hand, has produced eight NBA draft picks in the last eight years. Four of them have played over 120 games, and Jalen Smith (a top ten pick in 2020) is closing in on 100 himself. There are plenty of other former Terps who reached high levels of pro basketball as well, but Maryland has consistently produced higher quality talent than Seton Hall.</p>
-<p>So Willard’s team’s stats being so similar to Maryland should encourage Terp fans.</p>
+<p>So Willard’s team’s stats being so similar to Maryland’s should encourage Terp fans.</p>
 <pre class="r"><code>Turnovers_filter &lt;- Overall_rankings %&gt;% filter(Turnovers &gt; 2000 &amp; Forcing_Turnovers &gt; 2000)
 ggplot() + 
   geom_point(data=Turnovers_filter, aes(x=Turnovers, y=Forcing_Turnovers)) +
