@@ -184,9 +184,9 @@ ggplot() +
   geom_point(data=Maryland_total, aes(x=Turnovers, y=Forcing_Turnovers), color = &quot;red&quot;, size = 3) +
   geom_point(data=Seton_Hall, aes(x=Turnovers, y=Forcing_Turnovers), color = &quot;blue&quot;, size = 3) +
   geom_smooth(data=Turnovers_filter, aes(x=Turnovers, y=Forcing_Turnovers), method=&quot;lm&quot;) + 
-  labs(title=&quot;Seton Hall Forced more Turnovers than UMD&quot;, subtitle=&quot;The Terps turned the ball over just as much, but couldn&#39;t get their opponents to make mistakes&quot;, x=&quot;Turnovers&quot;, y=&quot;Opponent Turnovers&quot;, caption=&quot;Source: NCAA | By Ben Baruch&quot;) </code></pre>
+  labs(title=&quot;Seton Hall Forced More Turnovers Than UMD&quot;, subtitle=&quot;The Terps turned the ball over just as much, but couldn&#39;t get their opponents to make mistakes&quot;, x=&quot;Turnovers&quot;, y=&quot;Opponent Turnovers&quot;, caption=&quot;Source: NCAA | By Ben Baruch&quot;) </code></pre>
 <p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>Seton Hall falls much closer to NCAA average when it comes to turnover differential. Maryland, on the other hand, has turned the ball over far more than their opponents.</p>
+<p>Seton Hall (in blue) falls much closer to NCAA average when it comes to turnover differential. Maryland (in red), on the other hand, has turned the ball over far more than their opponents.</p>
 <p>The media described Willard as aggressive on defense. One way that could manifest on the stat sheet is opponent turnovers.</p>
 <p>Seton Hall’s opponents have turned the ball over much more than Maryland’s. That could be because of weaker competition in the Big East Conference, though it’s tough to tell only from the data at hand. Still, aggressive defense is a likely culprit. All this lands Seton Hall toward the top of their conference in terms of turnover differential in the last ten years. Maryland is toward the bottom (see bar charts).</p>
 <p>An important analytic to look at when it comes to turnovers is turnover ratio, the percentage of a team’s possessions that end in a turnover.</p>
@@ -207,7 +207,7 @@ ggplot() +
       weight=`Turnover_Differential`
       )
   ) + 
-  labs(title=&quot;Seton Hall Forced more Turnovers than UMD&quot;, subtitle=&quot;The Pirates were one of the better Big East teams in the last 10 years&quot;, x=&quot;Turnover Differential&quot;, y=&quot;Team&quot;, caption=&quot;Source: NCAA | By Ben Baruch&quot;) + coord_flip() </code></pre>
+  labs(title=&quot;Seton Hall Went Turnover for Turnover&quot;, subtitle=&quot;The Pirates still middle-of-the-pack in the Big East over the last 10 years&quot;, x=&quot;Turnover Differential&quot;, y=&quot;Team&quot;, caption=&quot;Source: NCAA | By Ben Baruch&quot;) + coord_flip() </code></pre>
 <p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <pre class="r"><code>Big_Ten_Turnovers &lt;- logs %&gt;% group_by(TeamFull) %&gt;% filter(Season %in% Maryland_Big_Ten, Conference == &quot;Big Ten&quot;) %&gt;% summarize(
   Turnovers = sum(TeamTurnovers),
