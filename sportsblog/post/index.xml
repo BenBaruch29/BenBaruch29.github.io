@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Ben Baruch&#39;s Sports Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 10 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://BenBaruch29.github.io/sportsblog/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 15 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://BenBaruch29.github.io/sportsblog/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>What Defines a Kevin Willard Team?</title>
+      <link>https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/</link>
+      <pubDate>Tue, 15 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/</guid>
+      <description>library(dplyr)library(ggplot2)library(scales)library(ggbeeswarm)library(ggrepel)library(tidyverse)logs &amp;lt;- read_csv(&amp;quot;C:/Users/benba/OneDrive/Documents/479xblogs/sportsblog/logs1222.csv&amp;quot;)Seton_Hall_logs &amp;lt;- logs %&amp;gt;% filter(TeamFull == &amp;quot;Seton Hall Pirates&amp;quot;)Overall_rankings &amp;lt;- logs %&amp;gt;% group_by(TeamFull, Conference) %&amp;gt;% summarize(Field_Goal_att = sum(TeamFGA),FG_pct = mean(TeamFGPCT),Personal_Fouls = sum(TeamPersonalFouls),Turnovers = sum(TeamTurnovers),Opposing_3s = sum(Opponent3PA),Opposing_FTs = sum(OpponentFTA),Boxing_Out = sum(OpponentOffRebounds),Forcing_Turnovers = sum(OpponentTurnovers),Blocks = sum(TeamBlocks),Limiting_Shots = sum(OpponentFGA),Total_Points_Against = sum(OpponentScore),Total_Points_For = sum(TeamScore),Turnover_Ratio = mean((TeamTurnovers*100/TeamFGA+(TeamFTA*0.44)+TeamAssists+TeamTurnovers))) %&amp;gt;% mutate(pct_3 = Opposing_3s / Limiting_Shots) %&amp;gt;% arrange(desc(Total_Points_Against))Maryland_SH &amp;lt;- logs %&amp;gt;% filter(TeamFull == &amp;quot;Maryland Terrapins&amp;quot; | TeamFull == &amp;quot;Seton Hall Pirates&amp;quot;) %&amp;gt;% group_by(TeamFull) %&amp;gt;% summarize(Field_Goal_att = sum(TeamFGA),FG_pct = mean(TeamFGPCT),Personal_Fouls = sum(TeamPersonalFouls),Turnovers = sum(TeamTurnovers),Opposing_3s = sum(Opponent3PA),Opposing_FTs = sum(OpponentFTA),Boxing_Out = sum(OpponentOffRebounds),Forcing_Turnovers = sum(OpponentTurnovers),Blocks = sum(TeamBlocks),Limiting_Shots = sum(OpponentFGA),Total_Points_Against = sum(OpponentScore),Total_Points_For = sum(TeamScore),Turnover_Ratio = mean((TeamTurnovers*100/TeamFGA+(TeamFTA*0.</description>
+    </item>
+    
     <item>
       <title>Are College Teams Passing More on First Down?</title>
       <link>https://BenBaruch29.github.io/sportsblog/2022/11/10/are-college-teams-passing-more-on-first-down/</link>

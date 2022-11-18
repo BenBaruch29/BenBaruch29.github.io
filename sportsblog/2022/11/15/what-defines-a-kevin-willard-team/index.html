@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.104.3" />
+
+
+<title>What Defines a Kevin Willard Team? - Ben Baruch&#39;s Sports Blog</title>
+<meta property="og:title" content="What Defines a Kevin Willard Team? - Ben Baruch&#39;s Sports Blog">
+
+
+  <link href='https://BenBaruch29.github.io/sportsblog/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/sportsblog/css/fonts.css" media="all">
+<link rel="stylesheet" href="/sportsblog/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/sportsblog/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/sportsblog/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">8 min read</span>
+    
+
+    <h1 class="article-title">What Defines a Kevin Willard Team?</h1>
+
+    
+    <span class="article-date">2022-11-15</span>
+    
+
+    <div class="article-content">
+      
+
+
+<pre class="r"><code>library(dplyr)
+library(ggplot2)
+library(scales)
+library(ggbeeswarm)
+library(ggrepel)
+library(tidyverse)
+logs &lt;- read_csv(&quot;C:/Users/benba/OneDrive/Documents/479xblogs/sportsblog/logs1222.csv&quot;)
+Seton_Hall_logs &lt;- logs %&gt;% filter(TeamFull == &quot;Seton Hall Pirates&quot;)</code></pre>
+<pre class="r"><code>Overall_rankings &lt;- logs %&gt;% group_by(TeamFull, Conference) %&gt;% summarize(
+  Field_Goal_att = sum(TeamFGA),
+  FG_pct = mean(TeamFGPCT),
+  Personal_Fouls = sum(TeamPersonalFouls),
+  Turnovers = sum(TeamTurnovers),
+  Opposing_3s = sum(Opponent3PA),
+  Opposing_FTs = sum(OpponentFTA),
+  Boxing_Out = sum(OpponentOffRebounds),
+  Forcing_Turnovers = sum(OpponentTurnovers),
+  Blocks = sum(TeamBlocks),
+  Limiting_Shots = sum(OpponentFGA),
+  Total_Points_Against = sum(OpponentScore),
+  Total_Points_For = sum(TeamScore),
+  Turnover_Ratio = mean((TeamTurnovers*100/TeamFGA+(TeamFTA*0.44)+TeamAssists+TeamTurnovers))
+  ) %&gt;% mutate(
+  pct_3 = Opposing_3s / Limiting_Shots
+  ) %&gt;% arrange(desc(Total_Points_Against))
+
+Maryland_SH &lt;- logs %&gt;% filter(TeamFull == &quot;Maryland Terrapins&quot; | TeamFull == &quot;Seton Hall Pirates&quot;) %&gt;% group_by(TeamFull) %&gt;% summarize(
+  Field_Goal_att = sum(TeamFGA),
+  FG_pct = mean(TeamFGPCT),
+  Personal_Fouls = sum(TeamPersonalFouls),
+  Turnovers = sum(TeamTurnovers),
+  Opposing_3s = sum(Opponent3PA),
+  Opposing_FTs = sum(OpponentFTA),
+  Boxing_Out = sum(OpponentOffRebounds),
+  Forcing_Turnovers = sum(OpponentTurnovers),
+  Blocks = sum(TeamBlocks),
+  Limiting_Shots = sum(OpponentFGA),
+  Total_Points_Against = sum(OpponentScore),
+  Total_Points_For = sum(TeamScore),
+  Turnover_Ratio = mean((TeamTurnovers*100/TeamFGA+(TeamFTA*0.44)+TeamAssists+TeamTurnovers))
+  ) %&gt;% mutate(
+  pct_3 = Opposing_3s / Limiting_Shots
+  ) %&gt;% arrange(desc(Total_Points_Against))
+
+Maryland &lt;- logs %&gt;% filter(TeamFull == &quot;Maryland Terrapins&quot;) %&gt;% group_by(TeamFull, Conference) %&gt;% summarize(
+  Field_Goal_att = sum(TeamFGA),
+  FG_pct = mean(TeamFGPCT),
+  Personal_Fouls = sum(TeamPersonalFouls),
+  Turnovers = sum(TeamTurnovers),
+  Opposing_3s = sum(Opponent3PA),
+  Opposing_FTs = sum(OpponentFTA),
+  Boxing_Out = sum(OpponentOffRebounds),
+  Forcing_Turnovers = sum(OpponentTurnovers),
+  Blocks = sum(TeamBlocks),
+  Limiting_Shots = sum(OpponentFGA),
+  Total_Points_Against = sum(OpponentScore),
+  Total_Points_For = sum(TeamScore),
+  Turnover_Ratio = mean((TeamTurnovers*100/TeamFGA+(TeamFTA*0.44)+TeamAssists+TeamTurnovers))
+  ) %&gt;% mutate(
+  pct_3 = Opposing_3s / Limiting_Shots
+  ) %&gt;% arrange(desc(Total_Points_Against))
+
+Seton_Hall &lt;- logs %&gt;% filter(TeamFull == &quot;Seton Hall Pirates&quot;) %&gt;% group_by(TeamFull, Conference) %&gt;% summarize(
+  Field_Goal_att = sum(TeamFGA),
+  FG_pct = mean(TeamFGPCT),
+  Personal_Fouls = sum(TeamPersonalFouls),
+  Turnovers = sum(TeamTurnovers),
+  Opposing_3s = sum(Opponent3PA),
+  Opposing_FTs = sum(OpponentFTA),
+  Boxing_Out = sum(OpponentOffRebounds),
+  Forcing_Turnovers = sum(OpponentTurnovers),
+  Blocks = sum(TeamBlocks),
+  Limiting_Shots = sum(OpponentFGA),
+  Total_Points_Against = sum(OpponentScore),
+  Total_Points_For = sum(TeamScore),
+  Turnover_Ratio = mean((TeamTurnovers*100/TeamFGA+(TeamFTA*0.44)+TeamAssists+TeamTurnovers))
+  ) %&gt;% mutate(
+  pct_3 = Opposing_3s / Limiting_Shots
+  ) %&gt;% arrange(desc(Total_Points_Against))</code></pre>
+<p>Take a look at the massive block of code above this sentence. I parsed through each of these stats to see what Seton Hall did well - and perhaps not so well - under head coach Kevin Willard. It turned out that in almost every category, Seton Hall’s performance was strikingly similar to Maryland.</p>
+<p>Willard’s Pirates also didn’t stand out in any individual category. They usually ranked high - even higher than some teams in their conference - in plenty of the above metrics, but Seton Hall never made waves in the way a Power Five team did. A few metrics that stood out were turnovers, and the lack of three-point attempts the Pirates allowed.</p>
+<p>Perhaps that’s what’s encouraging about Willard. He was able to get Maryland-like numbers, and play a Maryland-like game with a team that was never as talented as the Terps. Seton Hall has only produced four NBA draft picks under Willard’s tenure. None have played over 89 NBA games.</p>
+<p>Maryland, on the other hand, has produced eight NBA draft picks in the last eight years. Four of them have played over 120 games, and Jalen Smith (a top ten pick in 2020) is closing in on 100 himself. There are plenty of other former Terps who reached high levels of pro basketball as well, but Maryland has consistently produced higher quality talent than Seton Hall.</p>
+<p>So Willard’s team’s stats being so similar to Maryland should encourage Terp fans.</p>
+<pre class="r"><code>Turnovers_filter &lt;- Overall_rankings %&gt;% filter(Turnovers &gt; 2000 &amp; Forcing_Turnovers &gt; 2000)
+ggplot() + 
+  geom_point(data=Turnovers_filter, aes(x=Turnovers, y=Forcing_Turnovers)) +
+  geom_point(data=Maryland, aes(x=Turnovers, y=Forcing_Turnovers), color = &quot;red&quot;, size = 3) +
+  geom_point(data=Seton_Hall, aes(x=Turnovers, y=Forcing_Turnovers), color = &quot;blue&quot;, size = 3) +
+  geom_smooth(data=Turnovers_filter, aes(x=Turnovers, y=Forcing_Turnovers), method=&quot;lm&quot;)</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Seton Hall falls much closer to NCAA average when it comes to turnover differential. Maryland, on the other hand, has turned the ball over far more than their opponents.</p>
+<p>The media described Willard as aggressive on defense. One way that could manifest on the stat sheet is opponent turnovers.</p>
+<p>Seton Hall’s opponents have turned the ball over much more than Maryland’s. That could be because of weaker competition in the Big East Conference, though it’s tough to tell only from the data at hand. Still, aggressive defense is a likely culprit. All this lands Seton Hall toward the top of their conference in terms of turnover differential in the last ten years. Maryland is toward the bottom (see bar charts).</p>
+<p>An important analytic to look at when it comes to turnovers is turnover ratio, the percentage of a team’s possessions that end in a turnover.</p>
+<pre class="r"><code>Maryland_Big_Ten &lt;- c(&quot;2014-2015&quot;, &quot;2015-2016&quot;, &quot;2016-2017&quot;, &quot;2017-2018&quot;, &quot;2018-2019&quot;, &quot;2020-2021&quot;, &quot;2021-2022&quot;, &quot;2022-2023&quot;)
+
+Big_East_Turnovers &lt;- logs %&gt;% group_by(TeamFull) %&gt;% filter(Season %in% Maryland_Big_Ten, Conference == &quot;Big East&quot;) %&gt;% summarize(
+  Turnovers = sum(TeamTurnovers),
+  Forcing_Turnovers = sum(OpponentTurnovers),
+  Turnover_Ratio = mean((TeamTurnovers*100/TeamFGA+(TeamFTA*0.44)+TeamAssists+TeamTurnovers))) %&gt;% mutate(
+    Turnover_Differential = Forcing_Turnovers - Turnovers
+  )
+
+ggplot() + 
+  geom_bar(
+    data=Big_East_Turnovers,
+    aes(
+      x=reorder(TeamFull, `Turnover_Differential`), 
+      weight=`Turnover_Differential`
+      )
+  ) + coord_flip()</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>Big_Ten_Turnovers &lt;- logs %&gt;% group_by(TeamFull) %&gt;% filter(Season %in% Maryland_Big_Ten, Conference == &quot;Big Ten&quot;) %&gt;% summarize(
+  Turnovers = sum(TeamTurnovers),
+  Forcing_Turnovers = sum(OpponentTurnovers),
+  Turnover_Ratio = mean((TeamTurnovers*100/TeamFGA+(TeamFTA*0.44)+TeamAssists+TeamTurnovers))) %&gt;% mutate(
+    Turnover_Differential = Forcing_Turnovers - Turnovers
+  )
+
+ggplot() + 
+  geom_bar(
+    data=Big_Ten_Turnovers,
+    aes(
+      x=reorder(TeamFull, `Turnover_Differential`), 
+      weight=`Turnover_Differential`
+      )
+  ) + coord_flip()</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/index_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<pre class="r"><code>Big_Conferences &lt;- Overall_rankings %&gt;% filter(Conference == &quot;Big Ten&quot; | Conference == &quot;Big East&quot;)
+
+ggplot() + geom_beeswarm(data=Big_Conferences, aes(x=Conference, y=Turnover_Ratio), color=&quot;grey&quot;, size = 3) +
+  geom_beeswarm(data=Maryland, aes(x=Conference, y=Turnover_Ratio), color = &quot;red&quot;, size = 3) + 
+  geom_beeswarm(data=Seton_Hall, aes(x=Conference, y=Turnover_Ratio), color = &quot;blue&quot;, size = 3) </code></pre>
+<pre><code>## Warning in f(...): The default behavior of beeswarm has changed in version
+## 0.6.0. In versions &lt;0.6.0, this plot would have been dodged on the y-axis. In
+## versions &gt;=0.6.0, grouponX=FALSE must be explicitly set to group on y-axis.
+## Please set grouponX=TRUE/FALSE to avoid this warning and ensure proper axis
+## choice.
+
+## Warning in f(...): The default behavior of beeswarm has changed in version
+## 0.6.0. In versions &lt;0.6.0, this plot would have been dodged on the y-axis. In
+## versions &gt;=0.6.0, grouponX=FALSE must be explicitly set to group on y-axis.
+## Please set grouponX=TRUE/FALSE to avoid this warning and ensure proper axis
+## choice.</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/index_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
+<p>Maryland switched from the ACC to the Big Ten at the start of the 2014-2015 season. So in order to account for that, I limited the bar charts above to data from the start of that season onward.</p>
+<p>There are a lot of teams in the Big Ten that have a high, positive turnover differential. Maryland is not one of those teams. They’re on of two with a -300 turnover differential since the start of the 2014-2015 season. Seton Hall is also in the red, but just barely. They’re a -2, and -15 in Willard’s 10 seasons with the school.</p>
+<p>Expect the Terps to manage possession of the ball better, and to potentially be more aggresive on defense, thus forcing turnovers.</p>
+<p>As the beeswarm plot shows turnover ratio, Maryland had far more possesions end in turnovers while they were in the ACC. They got a lot better when they transfered to the Big Ten.</p>
+<p>Seton Hall also did a great job of forcing shots inside the three point line.</p>
+<pre class="r"><code>Big_East_3PA &lt;- Overall_rankings %&gt;% group_by(TeamFull, Conference) %&gt;% filter(Conference == &quot;Big East&quot;) %&gt;%  mutate(
+  pct_3 = Opposing_3s / Limiting_Shots
+  )
+
+Big_Ten_3PA &lt;- Overall_rankings %&gt;% group_by(TeamFull, Conference) %&gt;% filter(Conference == &quot;Big Ten&quot;) %&gt;%  mutate(
+  pct_3 = Opposing_3s / Limiting_Shots
+  )
+
+ggplot() + 
+  geom_beeswarm(data=Big_East_3PA,aes(x=Conference, y=pct_3), color = &quot;grey&quot;, size = 3) +
+  geom_beeswarm(data=Big_Ten_3PA,aes(x=Conference, y=pct_3), color = &quot;grey&quot;, size = 3) +
+  geom_beeswarm(data=Maryland, aes(x=Conference, y=pct_3), color = &quot;red&quot;, size = 3) + 
+  geom_beeswarm(data=Seton_Hall, aes(x=Conference, y=pct_3), color = &quot;blue&quot;, size = 3)</code></pre>
+<pre><code>## Warning in f(...): The default behavior of beeswarm has changed in version
+## 0.6.0. In versions &lt;0.6.0, this plot would have been dodged on the y-axis. In
+## versions &gt;=0.6.0, grouponX=FALSE must be explicitly set to group on y-axis.
+## Please set grouponX=TRUE/FALSE to avoid this warning and ensure proper axis
+## choice.
+
+## Warning in f(...): The default behavior of beeswarm has changed in version
+## 0.6.0. In versions &lt;0.6.0, this plot would have been dodged on the y-axis. In
+## versions &gt;=0.6.0, grouponX=FALSE must be explicitly set to group on y-axis.
+## Please set grouponX=TRUE/FALSE to avoid this warning and ensure proper axis
+## choice.</code></pre>
+<p><img src="https://BenBaruch29.github.io/sportsblog/2022/11/15/what-defines-a-kevin-willard-team/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Over the last 10 years, Maryland finished 181st in the nation in opposing 3-point shot attempts as a percentage of total field goals. That means about 36% of Maryland’s total field goals against were from beyond the arc. They allowed more once they entered the Big Ten. Seton Hall came in around 34%, but that was 91st best in the nation. They were better than Maryland at forcing shots inside the paint.</p>
+<p>This makes sense since Seton Hall also had 755 more FT attempts against in the last 10 seasons. This is likely the product of a team that plays aggressive in the paint. Seton Hall also had 218 more blocks than Maryland. It’s unclear where these shots came from, but it’s reasonable to expect they were closer to the basket. Willard will have to make sure his team stays disciplined if he wants to play this way at Maryland.</p>
+<p>The beeswarm plot above shows Maryland and Seton Hall’s three-point shot attempts percentage compared to the rest of their respective conferences.</p>
+<p>Whether or not this is an effective strategy remains to be seen, though Seton Hall only allowed 38 total more points than Maryland over the last ten years.</p>
+<p>Maryland and Seton Hall had pretty similar numbers for the rest of the statistics. The biggest questions therefore, is will Willard manage to replicate what he did at Seton Hall in Maryland, and use more talented players to improve on the performance he had at Seton Hall.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/sportsblog/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/sportsblog/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+
